@@ -3,7 +3,7 @@ import abc
 import torch.nn.functional
 
 
-class ModelInterface(metaclass=abc.ABCMeta):
+class Model(metaclass=abc.ABCMeta):
     def __init__(self, *args, **kwargs):
         self._threshold = 0.5
         pass

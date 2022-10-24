@@ -1,8 +1,8 @@
-from .interface import ModelInterface
+from .model import Model
 import torch
 
 
-class MLP(torch.nn.Module, ModelInterface):
+class MLP(torch.nn.Module, Model):
     def __init__(self, input_dim, layers, activation):
         super().__init__()
 
