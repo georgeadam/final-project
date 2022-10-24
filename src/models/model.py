@@ -1,16 +1,12 @@
 import abc
 
-import torch.nn.functional
+import torch
 
 
-class Model(metaclass=abc.ABCMeta):
+class Model(torch.nn.Module):
     def __init__(self, *args, **kwargs):
+        super().__init__()
         self._threshold = 0.5
-        pass
-
-    @abc.abstractmethod
-    def forward(self, *args):
-        raise NotImplementedError
 
     def predict(self, *args):
         probs = self.predict_proba(*args)
