@@ -1,5 +1,7 @@
-from .model import Model
 import torch
+
+from .creation import models
+from .model import Model
 
 
 class MLP(Model):
@@ -49,3 +51,6 @@ class MLP(Model):
             raise Exception("Number of layers cannot be negative")
 
         return fc
+
+
+models.register_builder("mlp", MLP)
