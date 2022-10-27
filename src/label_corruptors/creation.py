@@ -1,3 +1,3 @@
 from src.base.factory import Factory
 
-corruptors = Factory()
+label_corruptors = Factory()

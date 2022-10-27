@@ -2,11 +2,11 @@ import copy
 
 import numpy as np
 
-from .corruptor import CorruptorInterface
-from .creation import corruptors
+from .label_corruptor import LabelCorruptorInterface
+from .creation import label_corruptors
 
 
-class PositiveBiasNoise(CorruptorInterface):
+class UniformNoise(LabelCorruptorInterface):
     def __init__(self, noise_level):
         self.noise_level = noise_level
 
@@ -16,11 +16,10 @@ class PositiveBiasNoise(CorruptorInterface):
 
         new_y = copy.deepcopy(y)
 
-        negative_idx = np.where(preds == 0)[0]
-        noise_idx = np.random.choice(negative_idx, size=int(self.noise_level * len(negative_idx)), replace=False)
-        new_y[noise_idx] = 1
+        noise_idx = np.random.choice(np.arange(len(new_y)), size=int(self.noise_level * len(new_y)), replace=False)
+        new_y[noise_idx] = 1 - new_y[noise_idx]
 
         data_module.overwrite_current_update_labels(new_y, update_num)
 
 
-corruptors.register_builder("positive_bias_noise", PositiveBiasNoise)
+label_corruptors.register_builder("uniform_noise", UniformNoise)

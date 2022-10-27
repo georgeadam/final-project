@@ -2,11 +2,11 @@ import copy
 
 import numpy as np
 
-from .corruptor import CorruptorInterface
-from .creation import corruptors
+from .label_corruptor import LabelCorruptorInterface
+from .creation import label_corruptors
 
 
-class ErrorOscillation(CorruptorInterface):
+class ErrorAmplification(LabelCorruptorInterface):
     def __init__(self, corruption_prob):
         self.corruption_prob = corruption_prob
 
@@ -16,12 +16,12 @@ class ErrorOscillation(CorruptorInterface):
 
         new_y = copy.deepcopy(y)
 
-        fn_idx = np.where(np.logical_and(y == 1, preds == 0))[0]
-        fn_idx = np.random.choice(fn_idx, size=int(self.corruption_prob * len(fn_idx)),
+        fp_idx = np.where(np.logical_and(new_y == 0, preds == 1))[0]
+        fp_idx = np.random.choice(fp_idx, size=int(self.corruption_prob * len(fp_idx)),
                                   replace=False)
-        new_y[fn_idx] = 0
+        new_y[fp_idx] = 1
 
         data_module.overwrite_current_update_labels(new_y, update_num)
 
 
-corruptors.register_builder("error_oscillation", ErrorOscillation)
+label_corruptors.register_builder("error_amplification", ErrorAmplification)

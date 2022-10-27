@@ -1,5 +1,5 @@
 from .clean import Clean
-from .creation import corruptors
+from .creation import label_corruptors
 from .error_amplification import ErrorAmplification
 from .error_oscillation import ErrorOscillation
 from .negative_bias_noise import NegativeBiasNoise
