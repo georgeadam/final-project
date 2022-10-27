@@ -2,9 +2,10 @@ import torch
 
 
 class Model(torch.nn.Module):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, warm_start, *args, **kwargs):
         super().__init__()
         self._threshold = 0.5
+        self._warm_start = warm_start
 
     def predict(self, *args):
         probs = self.predict_proba(*args)
@@ -24,3 +25,7 @@ class Model(torch.nn.Module):
     @threshold.setter
     def threshold(self, new_threshold):
         self._threshold = new_threshold
+
+    @property
+    def warm_start(self):
+        return self._warm_start

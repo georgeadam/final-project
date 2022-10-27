@@ -11,7 +11,7 @@ class Module(LightningModule):
         self._lr_scheduler_args = lr_scheduler_args
 
     def forward(self, batch):
-        x, y, idx = batch
+        x, y = batch
 
         return self.model(x)
 
@@ -22,6 +22,13 @@ class Module(LightningModule):
                                             **self._lr_scheduler_args.params)
 
         return [optimizer], [lr_scheduler]
+
+    def predict_step(self, batch, batch_idx):
+        x, y = batch
+        probs = self.model.predict_proba(x)
+        preds = self.model.predict(x)
+
+        return probs, preds, y
 
     @abc.abstractmethod
     def _get_loss(self, *args, **kwargs):
