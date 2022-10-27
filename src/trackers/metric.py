@@ -7,7 +7,7 @@ from .creation import trackers
 from .tracker import TrackerInterface
 
 
-class MetricTracker(TrackerInterface):
+class Metric(TrackerInterface):
     def __init__(self):
         self._metrics = {"fpr": [], "tpr": [], "fnr": [], "tnr": [], "precision": [], "recall": [], "f1": [], "auc": [],
                          "loss": [], "aupr": [], "fp_conf": [], "pos_conf": [], "fp_count": [], "total_samples": [],
@@ -123,4 +123,4 @@ def f1_score(y: np.ndarray, y_pred: np.ndarray) -> float:
     return f1
 
 
-trackers.register_builder("metric_tracker", MetricTracker)
+trackers.register_builder("metric", Metric)

@@ -1,2 +1,3 @@
 from .creation import trackers
-from .metric import MetricTracker
+from .metric import Metric
+from .prediction import Prediction
