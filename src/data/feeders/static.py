@@ -45,7 +45,7 @@ class Static(FeederInterface):
 
         return x_update, y_update
 
-    def overwrite_current_update_labels(self, update_num, new_labels):
+    def overwrite_current_update_labels(self, new_labels, update_num):
         samples_per_update = int(len(self.x_update) / self.num_updates)
         self.y_update[(update_num - 1) * samples_per_update: update_num * samples_per_update] = new_labels
 

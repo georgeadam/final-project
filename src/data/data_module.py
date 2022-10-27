@@ -56,5 +56,5 @@ class DataModule(LightningDataModule):
     def num_updates(self):
         return self._num_updates
 
-    def overwrite_current_update_labels(self, update_num, new_labels):
-        self.data_feeder.overwrite_current_update_labels(update_num, new_labels)
+    def overwrite_current_update_labels(self, new_labels, update_num):
+        self.data_feeder.overwrite_current_update_labels(new_labels, update_num)
