@@ -27,6 +27,12 @@ class DataModule(LightningDataModule):
 
         return DataLoader(dataset, batch_size=self.batch_size, shuffle=True)
 
+    def val_dataloader(self, update_num=None):
+        x, y = self.data_feeder.get_val_data(update_num)
+        dataset = Dataset(x, y, transform=self.train_transform)
+
+        return DataLoader(dataset, batch_size=self.batch_size, shuffle=True)
+
     def current_update_batch_dataloader(self, update_num):
         x, y = self.data_feeder.get_current_update_batch(update_num)
         dataset = Dataset(x, y, transform=self.train_transform)
