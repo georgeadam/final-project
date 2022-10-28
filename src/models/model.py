@@ -10,13 +10,13 @@ class Model(torch.nn.Module):
     def predict(self, *args):
         probs = self.predict_proba(*args)
 
-        return (probs[:, 1] > self.threshold).int()
+        return (probs > self.threshold).int()
 
     def predict_proba(self, *args):
         with torch.no_grad():
             output = self.forward(*args)
 
-        return torch.nn.functional.softmax(output, dim=1)
+        return torch.sigmoid(output[:, 0])
 
     @property
     def threshold(self):
