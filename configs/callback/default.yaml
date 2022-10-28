@@ -1,0 +1,2 @@
+defaults:
+    - lightning@early_stopping: early_stopping

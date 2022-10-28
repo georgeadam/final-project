@@ -1,0 +1,5 @@
+name: pytorch
+params:
+    max_epochs: 50
+    max_steps: null
+    enable_checkpointing: False

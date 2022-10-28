@@ -1,0 +1,16 @@
+experiment_name: update_pipeline
+defaults:
+    - callback: default
+    - data_module: adult
+    - experiment: default
+    - label_corruptor: uniform_noise
+    - model: mlp
+    - module@original_module: standard
+    - module@update_module: standard
+    - threshold_selector: naive
+    - trainer@original_trainer: pytorch
+    - trainer@update_trainer: pytorch
+hydra:
+    run:
+        dir: results/${data_module.name}/${model.name}/update_pipeline/${experiment.seed}
+    output_subdir: .
