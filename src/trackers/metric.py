@@ -9,7 +9,7 @@ class Metric(TrackerInterface):
     def __init__(self):
         self._metrics = {"fpr": [], "tpr": [], "fnr": [], "tnr": [], "precision": [], "recall": [], "f1": [], "auc": [],
                          "loss": [], "aupr": [], "fp_conf": [], "pos_conf": [], "fp_count": [], "total_samples": [],
-                         "fp_prop": [], "acc": [], "youden": [], "update_num": [], "partition": []}
+                         "acc": [], "youden": [], "update_num": [], "partition": []}
 
     def track(self, probs, preds, y, partition, update_num):
         metrics = get_metrics(probs, preds, y)
@@ -25,6 +25,9 @@ class Metric(TrackerInterface):
 
     def get_table(self):
         return pd.DataFrame(self._metrics)
+
+    def get_most_recent(self, rate):
+        return self._metrics[rate][-1]
 
 
 trackers.register_builder("metric", Metric)

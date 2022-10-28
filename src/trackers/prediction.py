@@ -14,6 +14,7 @@ class Prediction(TrackerInterface):
         self._predictions["y"] += list(y)
         self._predictions["partition"] += [partition] * len(y)
         self._predictions["update_num"] += [update_num] * len(y)
+        self._predictions["sample_idx"] += list(range(len(y)))
 
     def get_table(self):
         return pd.DataFrame(self._predictions)
