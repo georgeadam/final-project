@@ -9,10 +9,7 @@ def get_metrics(probs, preds, y):
     tnr, fpr, fnr, tpr = tn / (tn + fp), fp / (fp + tn), fn / (tp + fn), tp / (tp + fn)
 
     precision = precision_score(y, preds)
-    if probs.shape[1] > 1:
-        auc = fast_auc(y, probs[:, 1])
-    else:
-        auc = fast_auc(y, probs[:, 0])
+    auc = fast_auc(y, probs)
 
     recall = recall_score(y, preds)
     f1 = f1_score(y, preds)
@@ -23,12 +20,8 @@ def get_metrics(probs, preds, y):
 
     acc = float(np.sum(y == preds) / samples)
 
-    if probs.shape[1] > 1:
-        fp_conf = np.mean(probs[fp_idx, 1])
-        pos_conf = np.mean(probs[pos_idx, 1])
-    else:
-        fp_conf = np.mean(probs[fp_idx, 0])
-        pos_conf = np.mean(probs[pos_idx, 0])
+    fp_conf = np.mean(probs[fp_idx])
+    pos_conf = np.mean(probs[pos_idx])
 
     fp_count = int(np.sum(fp_idx))
     total_samples = len(y)
