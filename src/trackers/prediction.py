@@ -6,7 +6,7 @@ from .tracker import TrackerInterface
 
 class Prediction(TrackerInterface):
     def __init__(self):
-        self._predictions = {"y": [], "prob": [], "pred": [], "update_num": [], "partition": []}
+        self._predictions = {"y": [], "prob": [], "pred": [], "update_num": [], "partition": [], "sample_idx": []}
 
     def track(self, probs, preds, y, partition, update_num):
         self._predictions["prob"] += list(probs)
