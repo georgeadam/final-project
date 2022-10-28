@@ -1,0 +1,5 @@
+name: fcn
+params:
+    num_units: 100
+    activation: ReLU
+    warm_start: false
