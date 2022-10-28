@@ -12,7 +12,7 @@ class ErrorOscillation(LabelCorruptorInterface):
 
     def corrupt(self, module, data_module, trainer, update_num):
         update_batch_dataloader = data_module.current_update_batch_dataloader(update_num)
-        _, preds, y = trainer.predict(module, dataloaders=update_batch_dataloader)
+        _, preds, y = trainer.make_predictions(module, dataloaders=update_batch_dataloader)
 
         new_y = copy.deepcopy(y)
 
