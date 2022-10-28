@@ -1,6 +1,27 @@
 from .creation import trainers
 from pytorch_lightning import Trainer
+import torch
 
 
-trainers.register_builder("pytorch", Trainer)
+class PyTorchTrainer(Trainer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def make_predictions(self, module, dataloaders):
+        results = self.predict(module, dataloaders=dataloaders)
+
+        probs = [results[i][0] for i in range(len(results))]
+        probs = torch.cat(probs)
+
+        preds = [results[i][1] for i in range(len(results))]
+        preds = torch.cat(preds)
+
+        y = [results[i][2] for i in range(len(results))]
+        y = torch.cat(y)
+
+        return probs.numpy(), preds.numpy(), y.numpy()
+
+
+
+trainers.register_builder("pytorch", PyTorchTrainer)
 
