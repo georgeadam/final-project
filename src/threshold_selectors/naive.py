@@ -24,12 +24,12 @@ class Naive(ThresholdSelector):
             mid = l + (r - l) // 2
             threshold = thresholds[mid]
 
-            temp_preds = probs[:, 1] >= threshold
+            temp_preds = probs >= threshold
             rates = get_metrics(probs, temp_preds, y)
 
             direction = self._get_direction()
 
-            if abs(rates[self.desired_rate] - self.desired_value) <= self.desired_rate * self.tolerance:
+            if abs(rates[self.desired_rate] - self.desired_value) <= self.desired_value * self.tolerance:
                 return threshold
             elif (rates[self.desired_rate] < self.desired_value and direction == "decreasing") or (
                     rates[self.desired_rate] > self.desired_value and direction == "increasing"):
@@ -49,7 +49,7 @@ class Naive(ThresholdSelector):
         best_diff = float("inf")
 
         for threshold in thresholds:
-            temp_preds = probs[:, 1] >= threshold
+            temp_preds = probs >= threshold
 
             rates = get_metrics(probs, temp_preds, y)
 
