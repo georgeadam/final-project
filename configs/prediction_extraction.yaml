@@ -1,0 +1,14 @@
+experiment_name: prediction_extraction
+defaults:
+    - callback: default
+    - data_module: adult
+    - experiment: default
+    - label_corruptor: clean
+    - model: mlp
+    - module: standard
+    - threshold_selector: naive
+    - trainer: pytorch
+hydra:
+    run:
+        dir: results/${data_module.name}/${model.name}/prediction_extraction/${experiment.seed}
+    output_subdir: .
