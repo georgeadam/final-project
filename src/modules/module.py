@@ -2,6 +2,9 @@ import abc
 
 from pytorch_lightning import LightningModule
 
+from src.lr_schedulers import lr_schedulers
+from src.optimizers import optimizers
+
 
 class Module(LightningModule):
     def __init__(self, model, optimizer_args, lr_scheduler_args):

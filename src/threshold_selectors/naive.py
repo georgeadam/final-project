@@ -5,7 +5,7 @@ from .creation import threshold_selectors
 from .threshold_selector import ThresholdSelector
 
 
-class Standard(ThresholdSelector):
+class Naive(ThresholdSelector):
     def _select_threshold_helper(self, probs, y):
         if self.desired_rate != "f1":
             return self._binary_search(probs, y)
@@ -66,4 +66,4 @@ class Standard(ThresholdSelector):
             return "decreasing"
 
 
-threshold_selectors.register_builder("standard", Standard)
+threshold_selectors.register_builder("naive", Naive)
