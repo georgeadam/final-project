@@ -1,4 +1,4 @@
-import torch
+import numpy as np
 from sklearn.model_selection import train_test_split
 
 from .creation import feeders
@@ -60,8 +60,8 @@ class Static(FeederInterface):
         x_update = self.x_update[: update_num * samples_per_update]
         y_update = self.y_update[: update_num * samples_per_update]
 
-        x = torch.cat([x_train, x_update])
-        y = torch.cat([y_train, y_update])
+        x = np.concatenate([x_train, x_update])
+        y = np.concatenate([y_train, y_update])
 
         return x, y
 

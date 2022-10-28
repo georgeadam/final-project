@@ -18,33 +18,36 @@ class DataModule(LightningDataModule):
         self.data_feeder = None
 
         self.train_transform = None
+        self.train_target_transform = None
         self.inference_transform = None
+        self.inference_target_transform = None
+
         self._num_updates = None
         self._data_dimension = None
 
     def train_dataloader(self, update_num=None):
         x, y = self.data_feeder.get_train_data(update_num)
-        dataset = Dataset(x, y, transform=self.train_transform)
+        dataset = Dataset(x, y, transform=self.train_transform, target_transform=self.train_target_transform)
 
         return DataLoader(dataset, batch_size=self.batch_size, shuffle=True)
 
     def val_dataloader(self, update_num=None):
         x, y = self.data_feeder.get_val_data(update_num)
-        dataset = Dataset(x, y, transform=self.train_transform)
+        dataset = Dataset(x, y, transform=self.inference_transform, target_transform=self.inference_target_transform)
 
-        return DataLoader(dataset, batch_size=self.batch_size, shuffle=True)
+        return DataLoader(dataset, batch_size=self.batch_size, shuffle=False)
 
     def current_update_batch_dataloader(self, update_num):
         x, y = self.data_feeder.get_current_update_batch(update_num)
-        dataset = Dataset(x, y, transform=self.train_transform)
+        dataset = Dataset(x, y, transform=self.inference_transform, target_transform=self.inference_target_transform)
 
-        return DataLoader(dataset, batch_size=self.batch_size, shuffle=True)
+        return DataLoader(dataset, batch_size=self.batch_size, shuffle=False)
 
     def eval_dataloader(self, update_num):
         x, y = self.data_feeder.get_eval_data(update_num)
-        dataset = Dataset(x, y, transform=self.inference_transform)
+        dataset = Dataset(x, y, transform=self.inference_transform, target_transform=self.inference_target_transform)
 
-        return DataLoader(dataset, batch_size=self.batch_size, shuffle=True)
+        return DataLoader(dataset, batch_size=self.batch_size, shuffle=False)
 
     @abc.abstractmethod
     def update_train_transform(self, x):

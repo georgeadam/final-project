@@ -7,6 +7,7 @@ from .data_module import DataModule
 from .feeders import feeders
 from .transforms import transforms
 
+from torchvision.transforms import Compose
 
 class Adult(DataModule):
     def __init__(self, data_dir, batch_size, feeder_args):
@@ -33,10 +34,8 @@ class Adult(DataModule):
                 index = dummy_x.columns.get_loc(numeric_col)
                 numeric_col_indices.append(index)
 
-            x = dummy_x.to_numpy()
-            x = torch.from_numpy(x).float()
-            y = pd.factorize(y)[0]
-            y = torch.from_numpy(y)
+            x = dummy_x.to_numpy().astype("float32")
+            y = pd.factorize(y)[0].astype(float)
 
             self._numeric_cols = numeric_col_indices
             self.data_feeder = feeders.create(self._feeder_args.name, **self._feeder_args.params,
@@ -50,13 +49,19 @@ class Adult(DataModule):
         scaler = transforms.create("scaler", cols=self._numeric_cols)
         scaler.fit(x)
 
-        self.train_transform = scaler
+        tensor = transforms.create("tensor")
+
+        self.train_transform = Compose([scaler, tensor])
+        self.train_target_transform = None
 
     def update_inference_transform(self, x):
         scaler = transforms.create("scaler", cols=self._numeric_cols)
         scaler.fit(x)
 
-        self.inference_transform = scaler
+        tensor = transforms.create("tensor")
+
+        self.inference_transform = Compose([scaler, tensor])
+        self.inference_target_transform = None
 
 
 data_modules.register_builder("adult", Adult)

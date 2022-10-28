@@ -1,6 +1,6 @@
 import copy
 
-import torch
+import numpy as np
 
 from .creation import transforms
 
@@ -14,11 +14,11 @@ class Scaler:
 
     def fit(self, x):
         if self.cols is not None:
-            self._mean = torch.mean(x[:, self.cols], dim=0)
-            self._std = torch.std(x[:, self.cols], dim=0)
+            self._mean = np.mean(x[:, self.cols], axis=0)
+            self._std = np.std(x[:, self.cols], axis=0)
         else:
-            self._mean = torch.mean(x, dim=0)
-            self._std = torch.std(x, dim=0)
+            self._mean = np.mean(x, axis=0)
+            self._std = np.std(x, axis=0)
 
     def __call__(self, x):
         x = copy.deepcopy(x)
