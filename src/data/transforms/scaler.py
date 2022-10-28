@@ -1,43 +1,34 @@
-import copy as copylib
+import copy
 
-from sklearn.preprocessing import StandardScaler
+import torch
 
 from .creation import transforms
 
 
-class Scaler(StandardScaler):
+class Scaler:
     def __init__(self, cols):
         super(Scaler, self).__init__()
         self.cols = cols
+        self._mean = None
+        self._std = None
 
-    def fit(self, X, y):
+    def fit(self, x):
         if self.cols is not None:
-            super(Scaler, self).fit(X[:, self.cols])
+            self._mean = torch.mean(x[:, self.cols], dim=0)
+            self._std = torch.std(x[:, self.cols], dim=0)
         else:
-            super(Scaler, self).fit(X)
+            self._mean = torch.mean(x, dim=0)
+            self._std = torch.std(x, dim=0)
 
-    def transform(self, X, copy=None):
-        if self.cols is not None:
-            X_copy = copylib.deepcopy(X)
-            orig_shape = X_copy.shape
+    def __call__(self, x):
+        x = copy.deepcopy(x)
 
-            if len(orig_shape) < 2:
-                X_copy = X_copy.reshape(1, -1)
-
-            X_copy[:, self.cols] = super(Scaler, self).transform(X_copy[:, self.cols], copy=copy)
-
-            X_copy = X_copy.reshape(*orig_shape)
-
-            return X_copy
+        if self.cols:
+            x[self.cols] = (x[self.cols] - self._mean) / self._std
         else:
-            orig_shape = X.shape
+            x = (x - self._mean) / self._std
 
-            if len(orig_shape) < 2:
-                X = X.reshape(1, -1)
-
-            X = X.reshape(*orig_shape)
-
-            return super(Scaler, self).transform(X)
+        return x
 
 
 transforms.register_builder("scaler", Scaler)

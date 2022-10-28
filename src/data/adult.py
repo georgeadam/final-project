@@ -1,6 +1,8 @@
 import pandas as pd
+import torch
 from sklearn.datasets import fetch_openml
 
+from .creation import data_modules
 from .data_module import DataModule
 from .feeders import feeders
 from .transforms import transforms
@@ -32,23 +34,29 @@ class Adult(DataModule):
                 numeric_col_indices.append(index)
 
             x = dummy_x.to_numpy()
+            x = torch.from_numpy(x).float()
             y = pd.factorize(y)[0]
+            y = torch.from_numpy(y)
 
-            self._numeric_cols = numeric_cols
+            self._numeric_cols = numeric_col_indices
             self.data_feeder = feeders.create(self._feeder_args.name, **self._feeder_args.params,
                                               x=x, y=y)
             self._num_updates = self.data_feeder.num_updates
+            self._data_dimension = x.shape[1]
 
             self.update_transforms(0)
 
     def update_train_transform(self, x):
-        scaler = transforms.create("scaler", self._numeric_cols)
+        scaler = transforms.create("scaler", cols=self._numeric_cols)
         scaler.fit(x)
 
         self.train_transform = scaler
 
     def update_inference_transform(self, x):
-        scaler = transforms.create("scaler", self._numeric_cols)
+        scaler = transforms.create("scaler", cols=self._numeric_cols)
         scaler.fit(x)
 
         self.inference_transform = scaler
+
+
+data_modules.register_builder("adult", Adult)

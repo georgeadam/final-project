@@ -14,3 +14,6 @@ class Dataset(TorchDataset):
             x = self.transform(x)
 
         return x, y
+
+    def __len__(self):
+        return len(self.x)

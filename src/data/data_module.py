@@ -20,6 +20,7 @@ class DataModule(LightningDataModule):
         self.train_transform = None
         self.inference_transform = None
         self._num_updates = None
+        self._data_dimension = None
 
     def train_dataloader(self, update_num=None):
         x, y = self.data_feeder.get_train_data(update_num)
@@ -54,7 +55,7 @@ class DataModule(LightningDataModule):
         raise NotImplementedError
 
     def update_transforms(self, update_num):
-        x, _ = self.data_feeder.get_all_data(update_num)
+        x, _ = self.data_feeder.get_train_data(update_num)
         self.update_train_transform(x)
         self.update_inference_transform(x)
 
@@ -64,3 +65,7 @@ class DataModule(LightningDataModule):
 
     def overwrite_current_update_labels(self, new_labels, update_num):
         self.data_feeder.overwrite_current_update_labels(new_labels, update_num)
+
+    @property
+    def data_dimension(self):
+        return self._data_dimension
