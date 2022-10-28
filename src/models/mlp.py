@@ -5,13 +5,13 @@ from .model import Model
 
 
 class MLP(Model):
-    def __init__(self, input_dim, layers, activation):
-        super().__init__()
+    def __init__(self, data_dimension, layers, activation, warm_start):
+        super().__init__(warm_start)
 
         self.activation = getattr(torch.nn, activation)()
 
         try:
-            self.layers = self._create_layers(layers, input_dim)
+            self.layers = self._create_layers(layers, data_dimension)
         except Exception:
             pass
 
@@ -24,19 +24,19 @@ class MLP(Model):
 
         return x
 
-    def _create_layers(self, layers, input_dim):
+    def _create_layers(self, layers, data_dimension):
         if layers == 0:
-            fc = torch.nn.ModuleList([torch.nn.Linear(input_dim, 2)])
+            fc = torch.nn.ModuleList([torch.nn.Linear(data_dimension, 2)])
         elif layers == 1:
-            fc = torch.nn.ModuleList([torch.nn.Linear(input_dim, 10),
+            fc = torch.nn.ModuleList([torch.nn.Linear(data_dimension, 10),
                                       torch.nn.Linear(10, 2)])
         elif layers == 2:
-            fc = torch.nn.ModuleList([torch.nn.Linear(input_dim, 20),
+            fc = torch.nn.ModuleList([torch.nn.Linear(data_dimension, 20),
                                       torch.nn.Linear(20, 10),
                                       torch.nn.Linear(10, 2)])
         elif layers > 2:
             initial_hidden_units = 50 * (2 ** layers)
-            fc = [torch.nn.Linear(input_dim, initial_hidden_units)]
+            fc = [torch.nn.Linear(data_dimension, initial_hidden_units)]
             prev_hidden_units = initial_hidden_units
 
             for i in range(1, layers):

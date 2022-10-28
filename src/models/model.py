@@ -10,7 +10,7 @@ class Model(torch.nn.Module):
     def predict(self, *args):
         probs = self.predict_proba(*args)
 
-        return (probs[:, 1] > self.threshold).astype(int)
+        return (probs[:, 1] > self.threshold).int()
 
     def predict_proba(self, *args):
         with torch.no_grad():
