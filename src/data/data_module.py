@@ -26,26 +26,29 @@ class DataModule(LightningDataModule):
         self._data_dimension = None
 
     def train_dataloader(self, update_num=None):
-        x, y = self.data_feeder.get_train_data(update_num)
-        dataset = Dataset(x, y, transform=self.train_transform, target_transform=self.train_target_transform)
+        x, y, indices = self.data_feeder.get_train_data(update_num)
+        dataset = Dataset(x, y, indices, transform=self.train_transform, target_transform=self.train_target_transform)
 
         return DataLoader(dataset, batch_size=self.batch_size, shuffle=True)
 
     def val_dataloader(self, update_num=None):
-        x, y = self.data_feeder.get_val_data(update_num)
-        dataset = Dataset(x, y, transform=self.inference_transform, target_transform=self.inference_target_transform)
+        x, y, indices = self.data_feeder.get_val_data(update_num)
+        dataset = Dataset(x, y, indices, transform=self.inference_transform,
+                          target_transform=self.inference_target_transform)
 
         return DataLoader(dataset, batch_size=self.batch_size, shuffle=False)
 
     def current_update_batch_dataloader(self, update_num):
-        x, y = self.data_feeder.get_current_update_batch(update_num)
-        dataset = Dataset(x, y, transform=self.inference_transform, target_transform=self.inference_target_transform)
+        x, y, indices = self.data_feeder.get_current_update_batch(update_num)
+        dataset = Dataset(x, y, indices, transform=self.inference_transform,
+                          target_transform=self.inference_target_transform)
 
         return DataLoader(dataset, batch_size=self.batch_size, shuffle=False)
 
     def eval_dataloader(self, update_num):
-        x, y = self.data_feeder.get_eval_data(update_num)
-        dataset = Dataset(x, y, transform=self.inference_transform, target_transform=self.inference_target_transform)
+        x, y, indices = self.data_feeder.get_eval_data(update_num)
+        dataset = Dataset(x, y, indices, transform=self.inference_transform,
+                          target_transform=self.inference_target_transform)
 
         return DataLoader(dataset, batch_size=self.batch_size, shuffle=False)
 
@@ -58,7 +61,7 @@ class DataModule(LightningDataModule):
         raise NotImplementedError
 
     def update_transforms(self, update_num):
-        x, _ = self.data_feeder.get_train_data(update_num)
+        x, _, _ = self.data_feeder.get_train_data(update_num)
         self.update_train_transform(x)
         self.update_inference_transform(x)
 

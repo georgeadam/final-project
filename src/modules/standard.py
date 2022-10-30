@@ -12,7 +12,7 @@ class Standard(Module):
         self.loss_fn = torch.nn.BCEWithLogitsLoss()
 
     def training_step(self, batch, batch_idx):
-        x, y = batch
+        x, y, _ = batch
         metrics = self._get_all_metrics(x, y)
 
         # Log loss and metric
@@ -26,7 +26,7 @@ class Standard(Module):
         if self.global_step == 0:
             wandb.define_metric('val/accuracy', summary='max')
 
-        x, y = batch
+        x, y, _ = batch
         metrics = self._get_all_metrics(x, y)
 
         # Log loss and metric

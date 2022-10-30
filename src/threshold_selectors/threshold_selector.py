@@ -13,7 +13,7 @@ class ThresholdSelector:
     # it does a forward pass on the appropriate data
     def select_threshold(self, module, data_module, trainer, update_num):
         val_dataloader = data_module.val_dataloader(update_num)
-        probs, _, y = trainer.make_predictions(module, dataloaders=val_dataloader)
+        probs, _, y, _ = trainer.make_predictions(module, dataloaders=val_dataloader)
 
         module.model.threshold = self._select_threshold_helper(probs, y)
 

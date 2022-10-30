@@ -19,7 +19,10 @@ class PyTorchTrainer(Trainer):
         y = [results[i][2] for i in range(len(results))]
         y = torch.cat(y)
 
-        return probs.numpy(), preds.numpy(), y.numpy()
+        indices = [results[i][3] for i in range(len(results))]
+        indices = torch.cat(indices)
+
+        return probs.numpy(), preds.numpy(), y.numpy(), indices.numpy()
 
 
 

@@ -1,13 +1,13 @@
+import numpy as np
 import pandas as pd
-import torch
 from sklearn.datasets import fetch_openml
+from torchvision.transforms import Compose
 
 from .creation import data_modules
 from .data_module import DataModule
 from .feeders import feeders
 from .transforms import transforms
 
-from torchvision.transforms import Compose
 
 class Adult(DataModule):
     def __init__(self, data_dir, batch_size, feeder_args):
@@ -36,10 +36,11 @@ class Adult(DataModule):
 
             x = dummy_x.to_numpy().astype("float32")
             y = pd.factorize(y)[0].astype(float)
+            indices = np.arange(len(x))
 
             self._numeric_cols = numeric_col_indices
             self.data_feeder = feeders.create(self._feeder_args.name, **self._feeder_args.params,
-                                              x=x, y=y)
+                                              x=x, y=y, indices=indices)
             self._num_updates = self.data_feeder.num_updates
             self._data_dimension = x.shape[1]
 
