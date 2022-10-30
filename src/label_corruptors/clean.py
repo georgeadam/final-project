@@ -1,9 +1,9 @@
-from .label_corruptor import LabelCorruptorInterface
 from .creation import label_corruptors
+from .label_corruptor import LabelCorruptor
 
 
-class Clean(LabelCorruptorInterface):
-    def __init__(self):
+class Clean(LabelCorruptor):
+    def __init__(self, *args, **kwargs):
         pass
 
     def corrupt(self, module, data_module, trainer, update_num):
