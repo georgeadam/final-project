@@ -1,4 +1,4 @@
-name: uniform_noise
+name: positive_bias
 params:
     noise_level: 0.0
     sample_limit: null

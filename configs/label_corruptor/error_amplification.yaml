@@ -1,0 +1,4 @@
+name: error_amplification
+params:
+    corruption_prob: 1.0
+    sample_limit: null
