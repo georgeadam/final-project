@@ -52,6 +52,18 @@ class DataModule(LightningDataModule):
 
         return DataLoader(dataset, batch_size=self.batch_size, shuffle=False)
 
+    def get_dataloader_by_partition(self, partition, update_num):
+        if partition == "train":
+            return self.train_transform(update_num)
+        elif partition == "val":
+            return self.val_dataloader(update_num)
+        elif partition == "eval":
+            return self.eval_dataloader(update_num)
+        elif partition == "update":
+            return self.current_update_batch_dataloader(update_num)
+        else:
+            raise Exception("Incorrect partition {} specified.".format(partition))
+
     @abc.abstractmethod
     def update_train_transform(self, x):
         raise NotImplementedError

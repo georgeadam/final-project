@@ -61,12 +61,10 @@ def initial_fit(args, callbacks_list, data_module, metric_tracker, prediction_tr
                 val_dataloaders=data_module.val_dataloader(0))
 
     threshold_selector.select_threshold(module, data_module, trainer, 0)
-    probs, preds, y, _ = trainer.make_predictions(module, dataloaders=data_module.current_update_batch_dataloader(1))
-    prediction_tracker.track(probs, preds, y, "update", 0)
-    metric_tracker.track(probs, preds, y, "update", 0)
+    prediction_tracker.track(module, data_module, trainer, "update", 1)
+    metric_tracker.track(module, data_module, trainer, "update", 1)
 
-    probs, preds, y, _ = trainer.make_predictions(module, dataloaders=data_module.eval_dataloader(0))
-    metric_tracker.track(probs, preds, y, "eval", 0)
+    metric_tracker.track(module, data_module, trainer, "eval", 0)
     wandb_logger.log_metrics({"eval/loss": metric_tracker.get_most_recent("loss"),
                               "eval/aupr": metric_tracker.get_most_recent("aupr"),
                               "eval/auc": metric_tracker.get_most_recent("auc")})

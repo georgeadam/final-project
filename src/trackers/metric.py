@@ -11,7 +11,11 @@ class Metric(TrackerInterface):
                          "loss": [], "aupr": [], "fp_conf": [], "pos_conf": [], "fp_count": [], "total_samples": [],
                          "acc": [], "youden": [], "update_num": [], "partition": []}
 
-    def track(self, probs, preds, y, partition, update_num):
+    def track(self, module, data_module, trainer, partition, update_num):
+        probs, preds, y, indices = trainer.make_predictions(module,
+                                                            dataloaders=data_module.get_dataloader_by_partition(
+                                                                partition, update_num))
+
         metrics = get_metrics(probs, preds, y)
 
         for key, value in metrics.items():

@@ -70,9 +70,8 @@ def initial_fit(args, callbacks_list, data_module, metric_tracker, prediction_tr
                 val_dataloaders=data_module.val_dataloader(0))
 
     threshold_selector.select_threshold(module, data_module, trainer, 0)
-    probs, preds, y, _ = trainer.make_predictions(module, dataloaders=data_module.eval_dataloader(0))
-    prediction_tracker.track(probs, preds, y, "eval", 0)
-    metric_tracker.track(probs, preds, y, "eval", 0)
+    prediction_tracker.track(module, data_module, trainer, "eval", 0)
+    metric_tracker.track(module, data_module, trainer, "eval", 0)
     wandb_logger.log_metrics({"eval_original/loss": metric_tracker.get_most_recent("loss"),
                               "eval_original/aupr": metric_tracker.get_most_recent("aupr"),
                               "eval_original/auc": metric_tracker.get_most_recent("auc")})
@@ -97,9 +96,8 @@ def update_model(args, callbacks_list, data_module, metric_tracker, model, modul
                     val_dataloaders=data_module.val_dataloader(update_num))
 
         threshold_selector.select_threshold(module, data_module, trainer, update_num)
-        probs, preds, y, _ = trainer.make_predictions(module, dataloaders=data_module.eval_dataloader(0))
-        prediction_tracker.track(probs, preds, y, "eval", update_num)
-        metric_tracker.track(probs, preds, y, "eval", update_num)
+        prediction_tracker.track(module, data_module, trainer, "eval", update_num)
+        metric_tracker.track(module, data_module, trainer, "eval", update_num)
 
 
 if __name__ == "__main__":

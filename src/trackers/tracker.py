@@ -3,7 +3,7 @@ import abc
 
 class TrackerInterface(metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def track(self, *args, **kwargs):
+    def track(self, module, data_module, trainer, partition, update_num):
         raise NotImplementedError
 
     @abc.abstractmethod
