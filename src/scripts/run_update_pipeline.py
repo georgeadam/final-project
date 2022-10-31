@@ -87,7 +87,7 @@ def update_model(args, callbacks_list, data_module, metric_tracker, model, modul
     trainer = trainers.create(args.update_trainer.name, callbacks=callbacks_list, logger=wandb_logger,
                               **args.update_trainer.params)
     label_corruptor = label_corruptors.create(args.label_corruptor.name, **args.label_corruptor.params)
-    for update_num in range(1, data_module.num_updates):
+    for update_num in range(1, data_module.num_updates + 1):
         label_corruptor.corrupt(module, data_module, trainer, update_num)
         data_module.update_transforms(update_num)
 
