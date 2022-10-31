@@ -2,7 +2,7 @@ experiment_name: prediction_extraction
 defaults:
     - callback: default
     - data_module: adult
-    - experiment: default
+    - experiment: prediction_extraction
     - label_corruptor: clean
     - model: mlp
     - module: standard

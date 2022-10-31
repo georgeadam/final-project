@@ -56,7 +56,10 @@ def main(args: DictConfig):
     wandb_logger.log_metrics({"eval_final/loss": metric_tracker.get_most_recent("loss"),
                               "eval_final/aupr": metric_tracker.get_most_recent("aupr"),
                               "eval_final/auc": metric_tracker.get_most_recent("auc")})
-    wandb_logger.log_table("predictions", dataframe=prediction_tracker.get_table())
+
+    if args.experiment.save_predictions:
+        wandb_logger.log_table("predictions", dataframe=prediction_tracker.get_table())
+
     wandb_logger.log_table("metrics", dataframe=metric_tracker.get_table())
 
 

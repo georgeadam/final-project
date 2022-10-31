@@ -2,7 +2,7 @@ experiment_name: update_pipeline
 defaults:
     - callback: default
     - data_module: adult
-    - experiment: default
+    - experiment: update_pipeline
     - label_corruptor: uniform_noise
     - model: mlp
     - module@original_module: standard
