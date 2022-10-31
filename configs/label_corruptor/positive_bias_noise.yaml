@@ -1,4 +1,4 @@
-name: positive_bias
+name: positive_bias_noise
 params:
     noise_level: 0.0
     sample_limit: null

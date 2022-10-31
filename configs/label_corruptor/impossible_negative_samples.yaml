@@ -1,0 +1,3 @@
+name: impossible_negative_samples
+params:
+    sample_limit: null
