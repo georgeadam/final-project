@@ -92,7 +92,7 @@ def update_model(args, callbacks_list, data_module, metric_tracker, model, modul
         data_module.update_transforms(update_num)
 
         if not model.warm_start:
-            models.create(args.model.name, data_dimension=data_module.data_dimension, **args.model.params)
+            model = models.create(args.model.name, data_dimension=data_module.data_dimension, **args.model.params)
 
         module = modules.create(args.update_module.name, model=model, **args.update_module.params)
         trainer.fit(module, train_dataloaders=data_module.train_dataloader(update_num),
