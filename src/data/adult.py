@@ -3,6 +3,7 @@ import pandas as pd
 from sklearn.datasets import fetch_openml
 from torchvision.transforms import Compose
 
+from src.utils.preprocess import get_numeric_col_indices
 from .creation import data_modules
 from .data_module import DataModule
 from .feeders import feeders
@@ -24,17 +25,10 @@ class Adult(DataModule):
 
             x, y = adult
 
-            dummy_x = pd.get_dummies(x)
-            dummy_cols = dummy_x.select_dtypes(exclude=["float"]).columns
+            x = pd.get_dummies(x)
+            numeric_col_indices = get_numeric_col_indices(x)
 
-            numeric_cols = dummy_x.columns.difference(dummy_cols)
-            numeric_col_indices = []
-
-            for numeric_col in numeric_cols:
-                index = dummy_x.columns.get_loc(numeric_col)
-                numeric_col_indices.append(index)
-
-            x = dummy_x.to_numpy().astype("float32")
+            x = x.to_numpy().astype("float32")
             y = pd.factorize(y)[0].astype(float)
             indices = np.arange(len(x))
 

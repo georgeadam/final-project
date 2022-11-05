@@ -3,6 +3,7 @@ import pandas as pd
 from scipy.io import arff
 from torchvision.transforms import Compose
 
+from src.utils.preprocess import get_numeric_col_indices
 from .creation import data_modules
 from .data_module import DataModule
 from .feeders import feeders
@@ -28,18 +29,12 @@ class CaliforniaHousing(DataModule):
             x = data[features]
             y = data["median_house_value"].astype(int)
 
-            dummy_x = pd.get_dummies(x)
-            dummy_cols = dummy_x.select_dtypes(exclude=["float"]).columns
+            x = pd.get_dummies(x)
+            numeric_col_indices = get_numeric_col_indices(x)
 
-            numeric_cols = dummy_x.columns.difference(dummy_cols)
-            numeric_col_indices = []
-
-            for numeric_col in numeric_cols:
-                index = dummy_x.columns.get_loc(numeric_col)
-                numeric_col_indices.append(index)
-
-            x = dummy_x.to_numpy()
+            x = x.to_numpy()
             y = y.to_numpy()
+
             median_price = np.median(y)
             y[y <= median_price] = 0
             y[y > median_price] = 1
