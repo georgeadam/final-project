@@ -21,9 +21,12 @@ class Adult(DataModule):
 
     def setup(self, stage=None):
         if not self.data_feeder:
-            adult = fetch_openml("adult", version=2, as_frame=True, return_X_y=True)
+            data = fetch_openml("adult", version=2, as_frame=True, return_X_y=True)
+            data = data.dropna()
+            x, y = data
 
-            x, y = adult
+            subgroup_cols = ["race", "sex", "native-country"]
+            self._subgroup_features = x[subgroup_cols]
 
             x = pd.get_dummies(x)
             numeric_col_indices = get_numeric_col_indices(x)

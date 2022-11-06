@@ -22,6 +22,7 @@ class DataModule(LightningDataModule):
         self.inference_transform = None
         self.inference_target_transform = None
 
+        self._subgroup_features = None
         self._num_updates = None
         self._data_dimension = None
 
@@ -87,3 +88,7 @@ class DataModule(LightningDataModule):
     @property
     def data_dimension(self):
         return self._data_dimension
+
+    @property
+    def subgroup_features(self):
+        return self._subgroup_features

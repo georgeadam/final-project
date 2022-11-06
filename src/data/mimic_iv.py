@@ -35,6 +35,10 @@ class MIMICIV(DataModule):
                 {"0 - 10": 5, "10 - 20": 15, "20 - 30": 25, "30 - 40": 35, "40 - 50": 45, "50 - 60": 55, "60 - 70": 65,
                  "70 - 80": 75, "> 80": 85})
             x["age"] = x["age"].astype("category")
+
+            subgroup_cols = ["age", "gender", "ethnicity"]
+            self._subgroup_features = x[subgroup_cols]
+
             x = pd.get_dummies(x)
             numeric_col_indices = get_numeric_col_indices(x)
 
