@@ -6,7 +6,20 @@ from sklearn.metrics import average_precision_score, balanced_accuracy_score
 def get_metrics(probs, preds, y):
     samples = float(len(y))
     tn, fp, fn, tp = confusion_matrix_custom(y, preds)
-    tnr, fpr, fnr, tpr = tn / (tn + fp), fp / (fp + tn), fn / (tp + fn), tp / (tp + fn)
+
+    if tn + fp == 0:
+        tnr = 0
+        fpr = 0
+    else:
+        tnr = tn / (tn + fp)
+        fpr = fp / (fp + tn)
+
+    if tp + fn == 0:
+        fnr = 0
+        tpr = 0
+    else:
+        fnr = fn / (tp + fn)
+        tpr = tp / (tp + fn)
 
     precision = precision_score(y, preds)
     auc = fast_auc(y, probs)
@@ -75,7 +88,10 @@ def precision_score(y: np.ndarray, y_pred: np.ndarray) -> float:
 def recall_score(y: np.ndarray, y_pred: np.ndarray) -> float:
     tn, fp, fn, tp = confusion_matrix_custom(y, y_pred)
 
-    return tp / (tp + fn)
+    if tp + fn == 0:
+        return 0
+    else:
+        return tp / (tp + fn)
 
 
 def f1_score(y: np.ndarray, y_pred: np.ndarray) -> float:
