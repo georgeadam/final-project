@@ -16,6 +16,9 @@ class Metric(TrackerInterface):
                                                             dataloaders=data_module.get_dataloader_by_partition(
                                                                 partition, update_num))
 
+        self.track_helper(probs, preds, y, partition, update_num)
+
+    def track_helper(self, probs, preds, y, partition, update_num):
         metrics = get_metrics(probs, preds, y)
 
         for key, value in metrics.items():

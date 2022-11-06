@@ -13,6 +13,9 @@ class Prediction(TrackerInterface):
                                                             dataloaders=data_module.get_dataloader_by_partition(
                                                                 partition, update_num))
 
+        self.track_helper(probs, preds, y, indices, partition, update_num)
+
+    def track_helper(self, probs, preds, y, indices, partition, update_num):
         self._predictions["prob"] += list(probs)
         self._predictions["pred"] += list(preds)
         self._predictions["y"] += list(y)
