@@ -44,13 +44,11 @@ def main(args: DictConfig):
     data_module = data_modules.create(args.data_module.name, **args.data_module.params)
     threshold_selector = threshold_selectors.create(args.threshold_selector.name, **args.threshold_selector.params)
 
-    callbacks_list = [callbacks.create(value.name, **value.params) for key, value in args.callback.items()]
-    model, module = initial_fit(args, callbacks_list, data_module, metric_tracker, prediction_tracker,
-                                threshold_selector, wandb_logger)
+    model, module = initial_fit(args, data_module, metric_tracker, prediction_tracker, threshold_selector, wandb_logger)
 
     wandb_logger = WandbLogger(project="final_project", prefix="update")
-    update_model(args, callbacks_list, counts, data_module, metric_tracker, model, module, prediction_tracker,
-                 threshold_selector, wandb_logger)
+    update_model(args, counts, data_module, metric_tracker, model, module, prediction_tracker, threshold_selector,
+                 wandb_logger)
 
     wandb_logger.log_metrics({"eval_final/loss": metric_tracker.get_most_recent("loss"),
                               "eval_final/aupr": metric_tracker.get_most_recent("aupr"),
@@ -62,10 +60,11 @@ def main(args: DictConfig):
     wandb_logger.log_table("metrics", dataframe=metric_tracker.get_table())
 
 
-def initial_fit(args, callbacks_list, data_module, metric_tracker, prediction_tracker, threshold_selector,
-                wandb_logger):
+def initial_fit(args, data_module, metric_tracker, prediction_tracker, threshold_selector, wandb_logger):
     model = models.create(args.model.name, data_dimension=data_module.data_dimension, **args.model.params)
     module = modules.create(args.original_module.name, model=model, **args.original_module.params)
+
+    callbacks_list = [callbacks.create(value.name, **value.params) for key, value in args.callback.items()]
     trainer = trainers.create(args.original_trainer.name, callbacks=callbacks_list, logger=wandb_logger,
                               **args.original_trainer.params)
     trainer.fit(module, train_dataloaders=data_module.train_dataloader(0),
@@ -80,12 +79,14 @@ def initial_fit(args, callbacks_list, data_module, metric_tracker, prediction_tr
     return model, module
 
 
-def update_model(args, callbacks_list, counts, data_module, metric_tracker, model, module, prediction_tracker,
-                 threshold_selector, wandb_logger):
-    trainer = trainers.create(args.update_trainer.name, callbacks=callbacks_list, logger=wandb_logger,
-                              **args.update_trainer.params)
+def update_model(args, counts, data_module, metric_tracker, model, module, prediction_tracker, threshold_selector,
+                 wandb_logger):
     label_corruptor = label_corruptors.create(args.label_corruptor.name, counts=counts, **args.label_corruptor.params)
+
     for update_num in range(1, data_module.num_updates + 1):
+        callbacks_list = [callbacks.create(value.name, **value.params) for key, value in args.callback.items()]
+        trainer = trainers.create(args.update_trainer.name, callbacks=callbacks_list, logger=wandb_logger,
+                                  **args.update_trainer.params)
         label_corruptor.corrupt(module, data_module, trainer, update_num)
         data_module.update_transforms(update_num)
 
