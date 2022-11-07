@@ -22,8 +22,11 @@ class Adult(DataModule):
     def setup(self, stage=None):
         if not self.data_feeder:
             data = fetch_openml("adult", version=2, as_frame=True, return_X_y=True)
-            data = data.dropna()
             x, y = data
+            x["y"] = y
+            x = x.dropna()
+            y = x["y"]
+            x = x.drop(columns=["y"])
 
             subgroup_cols = ["race", "sex", "native-country"]
             self._subgroup_features = x[subgroup_cols]
