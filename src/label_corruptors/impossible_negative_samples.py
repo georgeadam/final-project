@@ -19,7 +19,8 @@ class ImpossibleNegativeSamples(LabelCorruptor):
 
         negative_idx = np.where(preds == 0)[0]
         negative_idx = indices[negative_idx]
-        impossible_idx = self.counts.loc[self.counts["correct"] == 0]["sample_idx"].to_numpy()
+        impossible_idx = self.counts.loc[self.counts["correct"] == self.counts["correct"].min()][
+            "sample_idx"].to_numpy()
         noise_idx = np.intersect1d(negative_idx, impossible_idx)
         noise_idx = self.subset_indices(noise_idx, self.sample_limit)
 

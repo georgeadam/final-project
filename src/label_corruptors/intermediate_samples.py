@@ -16,7 +16,8 @@ class IntermediateSamples(LabelCorruptor):
         _, preds, y, indices = trainer.make_predictions(module, dataloaders=update_batch_dataloader)
 
         new_y = copy.deepcopy(y)
-        intermediate_idx = self.counts.loc[(self.counts["correct"] > 0) & (self.counts["correct"] < 100)]["sample_idx"].to_numpy()
+        intermediate_idx = self.counts.loc[(self.counts["correct"] > self.counts["correct"].min()) & (
+                self.counts["correct"] < self.counts["correct"].max())]["sample_idx"].to_numpy()
         intermediate_idx = np.intersect1d(indices, intermediate_idx)
         noise_idx = np.random.choice(intermediate_idx, size=self.sample_limit, replace=False)
 

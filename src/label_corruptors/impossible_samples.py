@@ -16,7 +16,9 @@ class ImpossibleSamples(LabelCorruptor):
         _, preds, y, indices = trainer.make_predictions(module, dataloaders=update_batch_dataloader)
 
         new_y = copy.deepcopy(y)
-        impossible_idx = self.counts.loc[self.counts["correct"] == 0]["sample_idx"].to_numpy()
+
+        impossible_idx = self.counts.loc[self.counts["correct"] == self.counts["correct"].min()][
+            "sample_idx"].to_numpy()
         impossible_idx = np.intersect1d(indices, impossible_idx)
         noise_idx = np.random.choice(impossible_idx, size=self.sample_limit, replace=False)
 

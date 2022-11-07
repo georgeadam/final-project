@@ -16,7 +16,7 @@ class EasySamples(LabelCorruptor):
         _, preds, y, indices = trainer.make_predictions(module, dataloaders=update_batch_dataloader)
 
         new_y = copy.deepcopy(y)
-        easy_idx = self.counts.loc[self.counts["correct"] == 100]["sample_idx"].to_numpy()
+        easy_idx = self.counts.loc[self.counts["correct"] == self.counts["correct"].max()]["sample_idx"].to_numpy()
         easy_idx = np.intersect1d(indices, easy_idx)
         noise_idx = np.random.choice(easy_idx, size=self.sample_limit, replace=False)
 

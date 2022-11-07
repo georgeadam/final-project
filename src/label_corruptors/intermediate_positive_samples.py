@@ -19,8 +19,8 @@ class IntermediatePositiveSamples(LabelCorruptor):
 
         positive_idx = np.where(preds == 1)[0]
         positive_idx = indices[positive_idx]
-        intermediate_idx = self.counts.loc[(self.counts["correct"] > 0) & (self.counts["correct"] < 100)][
-            "sample_idx"].to_numpy()
+        intermediate_idx = self.counts.loc[(self.counts["correct"] > self.counts["correct"].min()) & (
+                self.counts["correct"] < self.counts["correct"].max())]["sample_idx"].to_numpy()
         noise_idx = np.intersect1d(positive_idx, intermediate_idx)
         noise_idx = self.subset_indices(noise_idx, self.sample_limit)
 
