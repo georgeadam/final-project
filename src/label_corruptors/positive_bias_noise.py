@@ -11,18 +11,22 @@ class PositiveBiasNoise(LabelCorruptor):
         self.noise_level = noise_level
         self.sample_limit = sample_limit
 
-    def corrupt(self, module, data_module, trainer, update_num):
-        update_batch_dataloader = data_module.current_update_batch_dataloader(update_num)
-        _, preds, y, _ = trainer.make_predictions(module, dataloaders=update_batch_dataloader)
+    def corrupt_helper(self, preds, y):
+        y = copy.deepcopy(y)
+        indices = self.get_corruption_indices(preds)
+        y[indices] = 1
 
-        new_y = copy.deepcopy(y)
+        return y
 
-        negative_idx = np.where(preds == 0)[0]
-        noise_idx = np.random.choice(negative_idx, size=int(self.noise_level * len(negative_idx)), replace=False)
-        noise_idx = self.subset_indices(noise_idx, self.sample_limit)
-        new_y[noise_idx] = 1
+    def get_corruption_indices(self, preds):
+        indices = self.get_relevant_indices(preds)
+        indices = np.random.choice(indices, size=int(self.noise_level * len(indices)), replace=False)
+        indices = self.subset_indices(indices, self.sample_limit)
 
-        data_module.overwrite_current_update_labels(new_y, update_num)
+        return indices
+
+    def get_relevant_indices(self, preds):
+        return np.where(preds == 0)[0]
 
 
 label_corruptors.register_builder("positive_bias_noise", PositiveBiasNoise)

@@ -11,20 +11,22 @@ class ErrorOscillation(LabelCorruptor):
         self.corruption_prob = corruption_prob
         self.sample_limit = sample_limit
 
-    def corrupt(self, module, data_module, trainer, update_num):
-        update_batch_dataloader = data_module.current_update_batch_dataloader(update_num)
-        _, preds, y, _ = trainer.make_predictions(module, dataloaders=update_batch_dataloader)
+    def corrupt_helper(self, preds, y):
+        y = copy.deepcopy(y)
+        indices = self.get_corruption_indices(preds, y)
+        y[indices] = 0
 
-        new_y = copy.deepcopy(y)
+        return y
 
-        fn_idx = np.where(np.logical_and(y == 1, preds == 0))[0]
-        fn_idx = np.random.choice(fn_idx, size=int(self.corruption_prob * len(fn_idx)),
-                                  replace=False)
-        fn_idx = self.subset_indices(fn_idx, self.sample_limit)
+    def get_corruption_indices(self, preds, y):
+        indices = self.get_relevant_indices(preds, y)
+        indices = np.random.choice(indices, size=int(self.corruption_prob * len(indices)), replace=False)
+        indices = self.subset_indices(indices, self.sample_limit)
 
-        new_y[fn_idx] = 0
+        return indices
 
-        data_module.overwrite_current_update_labels(new_y, update_num)
+    def get_relevant_indices(self, preds, y):
+        return np.where(np.logical_and(y == 1, preds == 0))[0]
 
 
 label_corruptors.register_builder("error_oscillation", ErrorOscillation)
