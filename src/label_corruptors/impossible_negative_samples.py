@@ -8,28 +8,24 @@ from .label_corruptor import LabelCorruptor
 
 class ImpossibleNegativeSamples(LabelCorruptor):
     def __init__(self, counts, sample_limit):
+        super().__init__(sample_limit)
         self.counts = counts
-        self.sample_limit = sample_limit
 
-    def corrupt(self, module, data_module, trainer, update_num):
-        update_batch_dataloader = data_module.current_update_batch_dataloader(update_num)
-        _, preds, y, indices = trainer.make_predictions(module, dataloaders=update_batch_dataloader)
+    def corrupt_helper(self, preds, y, indices):
+        y = copy.deepcopy(y)
+        corruption_indices = self.get_corruption_indices(preds, indices)
+        y[corruption_indices] = 1
 
-        new_y = copy.deepcopy(y)
+        return y
 
-        negative_idx = np.where(preds == 0)[0]
-        negative_idx = indices[negative_idx]
-        impossible_idx = self.counts.loc[self.counts["correct"] == self.counts["correct"].min()][
-            "sample_idx"].to_numpy()
-        noise_idx = np.intersect1d(negative_idx, impossible_idx)
-        noise_idx = self.subset_indices(noise_idx, self.sample_limit)
+    def get_relevant_indices(self, preds, sample_indices):
+        indices = np.where(preds == 0)[0]
+        indices = sample_indices[indices]
 
-        sort_idx = indices.argsort()
-        sort_idx = sort_idx[np.searchsorted(indices, noise_idx, sorter=sort_idx)]
+        return indices
 
-        new_y[sort_idx] = 1
-
-        data_module.overwrite_current_update_labels(new_y, update_num)
+    def get_difficult_indices(self):
+        return self.counts.loc[self.counts["correct"] == self.counts["correct"].min()]["sample_idx"].to_numpy()
 
 
 label_corruptors.register_builder("impossible_negative_samples", ImpossibleNegativeSamples)
