@@ -8,8 +8,8 @@ from .label_corruptor import LabelCorruptor
 
 class ErrorAmplification(LabelCorruptor):
     def __init__(self, corruption_prob, sample_limit):
+        super().__init__(sample_limit)
         self.corruption_prob = corruption_prob
-        self.sample_limit = sample_limit
 
     def corrupt_helper(self, preds, y):
         y = copy.deepcopy(y)

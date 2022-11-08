@@ -8,8 +8,8 @@ from .label_corruptor import LabelCorruptor
 
 class UniformNoise(LabelCorruptor):
     def __init__(self, noise_level, sample_limit):
+        super().__init__(sample_limit)
         self.noise_level = noise_level
-        self.sample_limit = sample_limit
 
     def corrupt_helper(self, preds, y):
         y = copy.deepcopy(y)

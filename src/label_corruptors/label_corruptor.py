@@ -4,6 +4,9 @@ import numpy as np
 
 
 class LabelCorruptor:
+    def __init__(self, sample_limit=float("inf")):
+        self.sample_limit = sample_limit
+
     def corrupt(self, module, data_module, trainer, update_num):
         update_batch_dataloader = data_module.current_update_batch_dataloader(update_num)
         probs, preds, y, indices = trainer.make_predictions(module, dataloaders=update_batch_dataloader)

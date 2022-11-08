@@ -4,7 +4,7 @@ from .label_corruptor import LabelCorruptor
 
 class Clean(LabelCorruptor):
     def __init__(self, *args, **kwargs):
-        pass
+        super().__init__()
 
     def corrupt(self, module, data_module, trainer, update_num):
         pass
