@@ -1,24 +1,18 @@
 import copy
+import os
 
 import numpy as np
+import pandas as pd
 
+from settings import ROOT_DIR
 from .creation import label_corruptors
-from .label_corruptor import LabelCorruptor
+from .difficulty_corruptor import DifficultyCorruptor
 
 
-# the thing is that in order for this to work in the setting of multiple updates, we need to keep track of samples indices
-# otherwise we won't know how to match the data in the current batch to the full batch data in counts
-# I think that it's fine if we just have indices be compatible for the same random seed and data split, otherwise
-# things get a bit tricky. I.e. instead of the indices we return matching the indices of the raw data, they
-# instead match the split data. Actually nvm, this is not helpful. In particular, if we later want to take a look
-# at impossible samples, we need to figure out the samples in the raw data itself, so we might as well return the index
-# from raw data.
-
-
-class IntermediateNegativeSamples(LabelCorruptor):
-    def __init__(self, counts, sample_limit):
+class IntermediateNegativeSamples(DifficultyCorruptor):
+    def __init__(self, counts_path, sample_limit):
         super().__init__(sample_limit)
-        self.counts = counts
+        self.counts = pd.read_csv(os.path.join(ROOT_DIR, counts_path))
 
     def corrupt_helper(self, preds, y, indices):
         y = copy.deepcopy(y)

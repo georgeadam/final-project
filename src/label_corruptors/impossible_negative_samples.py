@@ -1,15 +1,18 @@
 import copy
+import os
 
 import numpy as np
+import pandas as pd
 
+from settings import ROOT_DIR
 from .creation import label_corruptors
-from .label_corruptor import LabelCorruptor
+from .difficulty_corruptor import DifficultyCorruptor
 
 
-class ImpossibleNegativeSamples(LabelCorruptor):
-    def __init__(self, counts, sample_limit):
+class ImpossibleNegativeSamples(DifficultyCorruptor):
+    def __init__(self, counts_path, sample_limit):
         super().__init__(sample_limit)
-        self.counts = counts
+        self.counts = pd.read_csv(os.path.join(ROOT_DIR, counts_path))
 
     def corrupt_helper(self, preds, y, indices):
         y = copy.deepcopy(y)
