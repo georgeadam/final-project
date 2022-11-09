@@ -87,7 +87,10 @@ def update_model(args, counts, data_module, metric_tracker, model, module, predi
         callbacks_list = [callbacks.create(value.name, **value.params) for key, value in args.callback.items()]
         trainer = trainers.create(args.update_trainer.name, callbacks=callbacks_list, logger=wandb_logger,
                                   **args.update_trainer.params)
+
+        metric_tracker.track(module, data_module, trainer, "update-clean", update_num)
         label_corruptor.corrupt(module, data_module, trainer, update_num)
+        metric_tracker.track(module, data_module, trainer, "update-noisy", update_num)
         data_module.update_transforms(update_num)
 
         if not model.warm_start:

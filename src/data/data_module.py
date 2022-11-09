@@ -60,7 +60,7 @@ class DataModule(LightningDataModule):
             return self.val_dataloader(update_num)
         elif partition == "eval":
             return self.eval_dataloader(update_num)
-        elif partition == "update":
+        elif "update" in partition:
             return self.current_update_batch_dataloader(update_num)
         else:
             raise Exception("Incorrect partition {} specified.".format(partition))
