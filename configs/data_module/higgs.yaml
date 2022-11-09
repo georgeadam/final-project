@@ -1,6 +1,6 @@
 name: higgs
 defaults:
-    - feeder@params.feeder_args: static
+    - feeder@params.feeder_args: cumulative_static
 params:
     batch_size: 32
     data_dir: data/higgs/higgs.arff
