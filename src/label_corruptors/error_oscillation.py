@@ -11,7 +11,7 @@ class ErrorOscillation(LabelCorruptor):
         super().__init__(sample_limit)
         self.corruption_prob = corruption_prob
 
-    def corrupt_helper(self, preds, y):
+    def corrupt_helper(self, preds, y, **kwargs):
         y = copy.deepcopy(y)
         indices = self.get_corruption_indices(preds, y)
         y[indices] = 0

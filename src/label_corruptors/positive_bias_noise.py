@@ -11,7 +11,7 @@ class PositiveBiasNoise(LabelCorruptor):
         super().__init__(sample_limit)
         self.noise_level = noise_level
 
-    def corrupt_helper(self, preds, y):
+    def corrupt_helper(self, preds, y, **kwargs):
         y = copy.deepcopy(y)
         indices = self.get_corruption_indices(preds)
         y[indices] = 1

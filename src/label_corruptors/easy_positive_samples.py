@@ -14,7 +14,7 @@ class EasyPositiveSamples(DifficultyCorruptor):
         super().__init__(sample_limit)
         self.counts = pd.read_csv(os.path.join(ROOT_DIR, counts_path))
 
-    def corrupt_helper(self, preds, y, indices):
+    def corrupt_helper(self, preds, y, indices, **kwargs):
         y = copy.deepcopy(y)
         corruption_indices = self.get_corruption_indices(preds, indices)
         y[corruption_indices] = 0
