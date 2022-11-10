@@ -7,15 +7,17 @@ from src.utils.preprocess import get_numeric_col_indices
 from .creation import data_modules
 from .data_module import DataModule
 from .feeders import feeders
+from .splitters import splitters
 from .transforms import transforms
 
 
 class CaliforniaHousing(DataModule):
-    def __init__(self, data_dir, batch_size, feeder_args):
+    def __init__(self, data_dir, batch_size, feeder_args, splitter_args):
         super().__init__(data_dir, batch_size)
 
         self._numeric_cols = None
         self._feeder_args = feeder_args
+        self._splitter_args = splitter_args
 
         self.setup(None)
 
@@ -30,7 +32,7 @@ class CaliforniaHousing(DataModule):
             y = data["median_house_value"].astype(int)
 
             x = pd.get_dummies(x)
-            numeric_col_indices = get_numeric_col_indices(x)
+            self._numeric_cols = get_numeric_col_indices(x)
 
             x = x.to_numpy()
             y = y.to_numpy()
@@ -41,12 +43,12 @@ class CaliforniaHousing(DataModule):
 
             x = x.astype("float32")
             y = y.astype("float32")
-
-            self._numeric_cols = numeric_col_indices
             indices = np.arange(len(x))
 
-            self.data_feeder = feeders.create(self._feeder_args.name, **self._feeder_args.params, x=x, y=y,
-                                              indices=indices)
+            splitter = splitters.create(self._splitter_args.name, **self._splitter_args.params)
+            splitted_data = splitter.split_data(x, y, indices)
+            self.data_feeder = feeders.create(self._feeder_args.name, **self._feeder_args.params,
+                                              splitted_data=splitted_data)
             self._num_updates = self.data_feeder.num_updates
             self._data_dimension = x.shape[1]
 

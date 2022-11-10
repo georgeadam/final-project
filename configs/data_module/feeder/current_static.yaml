@@ -1,8 +1,5 @@
 name: current_static
 params:
-    n_train: 0.2
-    n_update: 0.6
-    n_test: 0.2
     num_updates: 5
     random_state: 0
     val_percentage: 0.2

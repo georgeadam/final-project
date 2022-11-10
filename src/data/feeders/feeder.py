@@ -26,7 +26,3 @@ class FeederInterface(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def num_updates(self):
         raise NotImplementedError
-
-    @abc.abstractmethod
-    def _split_data(self, *args, **kwargs):
-        raise NotImplementedError

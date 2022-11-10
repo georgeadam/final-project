@@ -6,8 +6,8 @@ from .static import Static
 
 
 class CumulativeStatic(Static):
-    def __init__(self, x, y, indices, n_train, n_update, n_test, val_percentage, num_updates, random_state):
-        super().__init__(x, y, indices, n_train, n_update, n_test, val_percentage, num_updates, random_state)
+    def __init__(self, splitted_data, val_percentage, num_updates, random_state):
+        super().__init__(splitted_data, val_percentage, num_updates, random_state)
 
     def get_train_data(self, update_num):
         x, y, indices = self._get_all_cumulative_data(update_num)
