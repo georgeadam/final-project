@@ -4,3 +4,4 @@ from .cifar10_tabular import CIFAR10Tabular
 from .creation import data_modules
 from .higgs import Higgs
 from .mimic_iv import MIMICIV
+from .numerai import Numerai
