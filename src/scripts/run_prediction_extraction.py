@@ -51,7 +51,8 @@ def initial_fit(args, callbacks_list, data_module, metric_tracker, prediction_tr
                 wandb_logger):
     model = models.create(args.model.name, data_dimension=data_module.data_dimension, **args.model.params)
     module = modules.create(args.module.name, model=model, **args.module.params)
-    trainer = trainers.create(args.trainer.name, callbacks=callbacks_list, logger=wandb_logger, **args.trainer.params)
+    trainer = trainers.create(args.trainer.name, update_num=0, callbacks=callbacks_list, logger=wandb_logger,
+                              **args.trainer.params)
     trainer.fit(module, train_dataloaders=data_module.train_dataloader(0),
                 val_dataloaders=data_module.val_dataloader(0))
 

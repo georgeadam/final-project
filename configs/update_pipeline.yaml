@@ -1,6 +1,7 @@
 experiment_name: update_pipeline
 defaults:
-    - callback: default
+    - callback@original_callback: default
+    - callback@update_callback: default
     - data_module: adult
     - experiment: update_pipeline
     - label_corruptor: uniform_noise

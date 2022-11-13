@@ -4,8 +4,9 @@ import torch
 
 
 class PyTorchTrainer(Trainer):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, update_num, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.update_num = update_num
 
     def make_predictions(self, module, dataloaders):
         results = self.predict(module, dataloaders=dataloaders)

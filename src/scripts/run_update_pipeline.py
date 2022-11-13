@@ -60,8 +60,8 @@ def initial_fit(args, data_module, metric_tracker, prediction_tracker, threshold
     model = models.create(args.model.name, data_dimension=data_module.data_dimension, **args.model.params)
     module = modules.create(args.original_module.name, model=model, **args.original_module.params)
 
-    callbacks_list = [callbacks.create(value.name, **value.params) for key, value in args.callback.items()]
-    trainer = trainers.create(args.original_trainer.name, callbacks=callbacks_list, logger=wandb_logger,
+    callbacks_list = [callbacks.create(value.name, **value.params) for key, value in args.original_callback.items()]
+    trainer = trainers.create(args.original_trainer.name, update_num=0, callbacks=callbacks_list, logger=wandb_logger,
                               **args.original_trainer.params)
     trainer.fit(module, train_dataloaders=data_module.train_dataloader(0),
                 val_dataloaders=data_module.val_dataloader(0))
@@ -80,9 +80,9 @@ def update_model(args, data_module, metric_tracker, model, module, prediction_tr
     label_corruptor = label_corruptors.create(args.label_corruptor.name, **args.label_corruptor.params)
 
     for update_num in range(1, data_module.num_updates + 1):
-        callbacks_list = [callbacks.create(value.name, **value.params) for key, value in args.callback.items()]
-        trainer = trainers.create(args.update_trainer.name, callbacks=callbacks_list, logger=wandb_logger,
-                                  **args.update_trainer.params)
+        callbacks_list = [callbacks.create(value.name, **value.params) for key, value in args.update_callback.items()]
+        trainer = trainers.create(args.update_trainer.name, update_num=update_num, callbacks=callbacks_list,
+                                  logger=wandb_logger, **args.update_trainer.params)
 
         metric_tracker.track(module, data_module, trainer, "update-clean", update_num)
         label_corruptor.corrupt(module, data_module, trainer, update_num)
