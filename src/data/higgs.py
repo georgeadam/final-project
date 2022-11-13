@@ -5,6 +5,7 @@ from torchvision.transforms import Compose
 
 from .creation import data_modules
 from .data_module import DataModule
+from .eager_dataset import EagerDataset
 from .feeders import feeders
 from .splitters import splitters
 from .transforms import transforms
@@ -41,6 +42,7 @@ class Higgs(DataModule):
             splitted_data = splitter.split_data(x, y, indices)
             self.data_feeder = feeders.create(self._feeder_args.name, **self._feeder_args.params,
                                               splitted_data=splitted_data)
+            self.data_wrapper = EagerDataset
             self._num_updates = self.data_feeder.num_updates
             self._data_dimension = x.shape[1]
 

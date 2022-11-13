@@ -5,7 +5,6 @@ from pytorch_lightning import LightningDataModule
 from torch.utils.data import DataLoader
 
 from settings import ROOT_DIR
-from .dataset import Dataset
 
 
 class DataModule(LightningDataModule):
@@ -16,6 +15,7 @@ class DataModule(LightningDataModule):
         self.batch_size = batch_size
 
         self.data_feeder = None
+        self.data_wrapper = None
 
         self.train_transform = None
         self.train_target_transform = None
@@ -28,28 +28,29 @@ class DataModule(LightningDataModule):
 
     def train_dataloader(self, update_num=None):
         x, y, indices = self.data_feeder.get_train_data(update_num)
-        dataset = Dataset(x, y, indices, transform=self.train_transform, target_transform=self.train_target_transform)
+        dataset = self.data_wrapper(x, y, indices, transform=self.train_transform,
+                                    target_transform=self.train_target_transform)
 
         return DataLoader(dataset, batch_size=self.batch_size, shuffle=True)
 
     def val_dataloader(self, update_num=None):
         x, y, indices = self.data_feeder.get_val_data(update_num)
-        dataset = Dataset(x, y, indices, transform=self.inference_transform,
-                          target_transform=self.inference_target_transform)
+        dataset = self.data_wrapper(x, y, indices, transform=self.inference_transform,
+                                    target_transform=self.inference_target_transform)
 
         return DataLoader(dataset, batch_size=self.batch_size, shuffle=False)
 
     def current_update_batch_dataloader(self, update_num):
         x, y, indices = self.data_feeder.get_current_update_batch(update_num)
-        dataset = Dataset(x, y, indices, transform=self.inference_transform,
-                          target_transform=self.inference_target_transform)
+        dataset = self.data_wrapper(x, y, indices, transform=self.inference_transform,
+                                    target_transform=self.inference_target_transform)
 
         return DataLoader(dataset, batch_size=self.batch_size, shuffle=False)
 
     def eval_dataloader(self, update_num):
         x, y, indices = self.data_feeder.get_eval_data(update_num)
-        dataset = Dataset(x, y, indices, transform=self.inference_transform,
-                          target_transform=self.inference_target_transform)
+        dataset = self.data_wrapper(x, y, indices, transform=self.inference_transform,
+                                    target_transform=self.inference_target_transform)
 
         return DataLoader(dataset, batch_size=self.batch_size, shuffle=False)
 

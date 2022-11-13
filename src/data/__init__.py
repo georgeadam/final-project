@@ -7,3 +7,4 @@ from .higgs import Higgs
 from .mimic_iv import MIMICIV
 from .miniboone import Miniboone
 from .numerai import Numerai
+from .waterbirds import Waterbirds

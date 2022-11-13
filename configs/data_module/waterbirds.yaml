@@ -1,0 +1,7 @@
+name: waterbirds
+defaults:
+    - feeder@params.feeder_args: cumulative_static
+    - splitter@params.splitter_args: precomputed
+params:
+    batch_size: 32
+    data_dir: data/waterbirds/data/waterbird_complete95_forest2water2
