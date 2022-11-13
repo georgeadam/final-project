@@ -13,5 +13,5 @@ defaults:
     - trainer@update_trainer: pytorch
 hydra:
     run:
-        dir: results/${data_module.name}/${model.name}/update_pipeline/${experiment.seed}
+        dir: results/${data_module.name}/${model.name}/${experiment_name}/${wandb_run:}
     output_subdir: .

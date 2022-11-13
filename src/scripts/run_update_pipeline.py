@@ -17,9 +17,11 @@ from src.modules import modules
 from src.threshold_selectors import threshold_selectors
 from src.trackers import trackers
 from src.trainers import trainers
+from src.utils.hydra import get_wandb_run
 
 os.chdir(ROOT_DIR)
 config_path = os.path.join(ROOT_DIR, "configs")
+OmegaConf.register_new_resolver("wandb_run", get_wandb_run)
 
 
 @hydra.main(config_path=config_path, config_name="update_pipeline")

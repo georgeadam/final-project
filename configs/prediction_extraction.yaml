@@ -10,5 +10,5 @@ defaults:
     - trainer: pytorch
 hydra:
     run:
-        dir: results/${data_module.name}/${model.name}/prediction_extraction/${experiment.seed}
+        dir: results/${data_module.name}/${model.name}/${experiment_name}/${wandb_run:}
     output_subdir: .

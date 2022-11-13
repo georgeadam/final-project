@@ -8,6 +8,7 @@ class ModelCheckpoint(LightningModelCheckpoint):
         super().__init__(*args, **kwargs, monitor="val/loss", mode="min")
 
     def setup(self, trainer, pl_module, stage=None) -> None:
+        self.dirpath = "checkpoints"
         self.filename = "{epoch}" + "-" + "update_num={}".format(trainer.update_num)
         super().setup(trainer, pl_module, stage)
 
