@@ -62,7 +62,11 @@ def fast_auc(y_true: np.ndarray, y_prob: np.ndarray) -> float:
         nfalse += (1 - y_i)
         auc += y_i * nfalse
 
-    auc /= (nfalse * (n - nfalse))
+    if (nfalse * (n - nfalse)) != 0:
+        auc /= (nfalse * (n - nfalse))
+    else:
+        auc = 0
+
     return auc
 
 
