@@ -1,3 +1,4 @@
+import copy
 import logging
 import os
 
@@ -82,6 +83,7 @@ def update_model(args, data_module, metric_tracker, model, module, prediction_tr
     label_corruptor = label_corruptors.create(args.label_corruptor.name, **args.label_corruptor.params)
 
     for update_num in range(1, data_module.num_updates + 1):
+        original_model = copy.deepcopy(model)
         callbacks_list = [callbacks.create(value.name, **value.params) for key, value in args.update_callback.items()]
         trainer = trainers.create(args.update_trainer.name, update_num=update_num, callbacks=callbacks_list,
                                   logger=wandb_logger, **args.update_trainer.params)
@@ -94,7 +96,8 @@ def update_model(args, data_module, metric_tracker, model, module, prediction_tr
         if not model.warm_start:
             model = models.create(args.model.name, data_dimension=data_module.data_dimension, **args.model.params)
 
-        module = modules.create(args.update_module.name, model=model, **args.update_module.params)
+        module = modules.create(args.update_module.name, model=model, original_model=original_model,
+                                **args.update_module.params)
         trainer.fit(module, train_dataloaders=data_module.train_dataloader(update_num),
                     val_dataloaders=data_module.val_dataloader(update_num))
 

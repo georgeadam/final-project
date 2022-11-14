@@ -1,0 +1,6 @@
+name: distillation
+defaults:
+    - lr_scheduler@params.lr_scheduler_args: constant
+    - optimizer@params.optimizer_args: adam
+params:
+    alpha: 0.5
