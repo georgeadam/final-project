@@ -29,6 +29,9 @@ class Waterbirds(DataModule):
             y = metadata["y"].values
             numeric_splits = metadata["split"].values
 
+            subgroup_cols = ["place"]
+            self._subgroup_features = metadata[subgroup_cols]
+
             splits = {}
             splits["train"] = np.where(numeric_splits == 0)[0]
             splits["update"] = np.where(numeric_splits == 1)[0]
