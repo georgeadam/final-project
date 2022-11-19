@@ -1,3 +1,7 @@
+import abc
+
+from sklearn.model_selection import train_test_split
+
 from .feeder import FeederInterface
 
 
@@ -19,21 +23,36 @@ class Static(FeederInterface):
         self._num_updates = num_updates
         self._random_state = random_state
 
+        self._label_updater = None
+        self._batch_fetcher = None
+
     @property
     def num_updates(self):
         return self._num_updates
+
+    def get_train_data(self, update_num):
+        x, y, indices = self._get_all_data_for_split(update_num)
+        x, _, y, _, indices, _ = train_test_split(x, y, indices, test_size=self._val_percentage,
+                                                  random_state=self._random_state)
+
+        return x, y, indices
+
+    def get_val_data(self, update_num):
+        x, y, indices = self._get_all_data_for_split(update_num)
+        _, x, _, y, _, indices = train_test_split(x, y, indices, test_size=self._val_percentage,
+                                                  random_state=self._random_state)
+
+        return x, y, indices
 
     def get_eval_data(self, update_num):
         return self.x_test, self.y_test, self.indices_test
 
     def get_current_update_batch(self, update_num):
-        samples_per_update = int(len(self.x_update) / self.num_updates)
-        x_update = self.x_update[(update_num - 1) * samples_per_update: update_num * samples_per_update]
-        y_update = self.y_update[(update_num - 1) * samples_per_update: update_num * samples_per_update]
-        indices_update = self.indices_update[(update_num - 1) * samples_per_update: update_num * samples_per_update]
-
-        return x_update, y_update, indices_update
+        return self._batch_fetcher(self.x_update, self.y_update, self.indices_update, update_num)
 
     def overwrite_current_update_labels(self, new_labels, update_num):
-        samples_per_update = int(len(self.x_update) / self.num_updates)
-        self.y_update[(update_num - 1) * samples_per_update: update_num * samples_per_update] = new_labels
+        self._label_updater.update_labels(self.y_update, new_labels, update_num)
+
+    @abc.abstractmethod
+    def _get_all_data_for_split(self, update_num):
+        raise NotImplementedError
