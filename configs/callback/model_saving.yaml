@@ -1,0 +1,3 @@
+defaults:
+    - lightning@early_stopping: early_stopping
+    - lightning@model_checkpoint: model_checkpoint

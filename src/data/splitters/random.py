@@ -16,11 +16,16 @@ class Random(SplitterInterface):
                                                                                                train_size=self.n_train,
                                                                                                test_size=self.n_update + self.n_test,
                                                                                                random_state=self.random_state)
-        x_update, x_test, y_update, y_test, indices_update, indices_test = train_test_split(x_update, y_update,
-                                                                                            indices_update,
-                                                                                            train_size=self.n_update,
-                                                                                            test_size=self.n_test,
-                                                                                            random_state=self.random_state)
+
+        if self.n_update == 0:
+            x_test, y_test, indices_test = x_update, y_update, indices_update
+            x_update, y_update, indices_update = None, None, None
+        else:
+            x_update, x_test, y_update, y_test, indices_update, indices_test = train_test_split(x_update, y_update,
+                                                                                                indices_update,
+                                                                                                train_size=self.n_update,
+                                                                                                test_size=self.n_test,
+                                                                                                random_state=self.random_state)
 
         splitted = {"x_train": x_train, "y_train": y_train, "indices_train": indices_train,
                     "x_update": x_update, "y_update": y_update, "indices_update": indices_update,
