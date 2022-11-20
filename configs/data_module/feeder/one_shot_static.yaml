@@ -1,0 +1,4 @@
+name: one_shot_static
+params:
+    random_state: 0
+    val_percentage: 0.2
