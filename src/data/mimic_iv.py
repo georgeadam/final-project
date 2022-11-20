@@ -24,6 +24,7 @@ class MIMICIV(DataModule):
     def setup(self, stage=None):
         if not self.data_feeder:
             data = pd.read_csv(self.data_dir)
+            data = data.dropna()
 
             features = ['HeartRate_Min', 'HeartRate_Max', 'HeartRate_Mean', 'SysBP_Min', 'SysBP_Max', 'SysBP_Mean',
                         'DiasBP_Min', 'DiasBP_Max', 'DiasBP_Mean', 'MeanBP_Min', 'MeanBP_Max', 'MeanBP_Mean',
