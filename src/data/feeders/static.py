@@ -48,7 +48,7 @@ class Static(FeederInterface):
         return self.x_test, self.y_test, self.indices_test
 
     def get_current_update_batch(self, update_num):
-        return self._batch_fetcher(self.x_update, self.y_update, self.indices_update, update_num)
+        return self._batch_fetcher.fetch(self.x_update, self.y_update, self.indices_update, update_num)
 
     def overwrite_current_update_labels(self, new_labels, update_num):
         self._label_updater.update_labels(self.y_update, new_labels, update_num)
