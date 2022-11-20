@@ -1,0 +1,4 @@
+name: third_tercile
+params:
+    counts_path: "results/counts/temp.csv"
+    sample_limit: null
