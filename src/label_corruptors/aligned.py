@@ -19,7 +19,6 @@ class Aligned(LabelCorruptor):
 
     def get_corruption_indices(self, preds, y):
         indices = self.get_relevant_indices(preds, y)
-        indices = np.random.choice(indices, size=int(len(indices)), replace=False)
         indices = self.subset_indices(indices, self.sample_limit)
 
         return indices
