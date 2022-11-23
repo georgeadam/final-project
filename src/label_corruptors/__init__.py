@@ -17,4 +17,5 @@ from .negative_bias_noise import NegativeBiasNoise
 from .positive_bias_noise import PositiveBiasNoise
 from .second_tercile import SecondTercile
 from .third_tercile import ThirdTercile
+from .unaligned import Unaligned
 from .uniform_noise import UniformNoise
