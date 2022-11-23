@@ -10,9 +10,9 @@ class LabelCorruptor:
 
     def corrupt(self, module, data_module, trainer, update_num):
         update_batch_dataloader = data_module.current_update_batch_dataloader(update_num)
-        probs, preds, y, indices = trainer.make_predictions(module, dataloaders=update_batch_dataloader)
+        probs, preds, y, sample_indices = trainer.make_predictions(module, dataloaders=update_batch_dataloader)
 
-        new_y = self.corrupt_helper(probs=probs, preds=preds, y=y, indices=indices)
+        new_y = self.corrupt_helper(probs=probs, preds=preds, y=y, sample_indices=sample_indices)
         data_module.overwrite_current_update_labels(new_y, update_num)
 
     @abc.abstractmethod

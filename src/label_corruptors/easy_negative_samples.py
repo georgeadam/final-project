@@ -14,9 +14,9 @@ class EasyNegativeSamples(DifficultyCorruptor):
         super().__init__(sample_limit, seed)
         self.counts = pd.read_csv(os.path.join(ROOT_DIR, counts_path))
 
-    def corrupt_helper(self, preds, y, indices, **kwargs):
+    def corrupt_helper(self, preds, y, sample_indices, **kwargs):
         y = copy.deepcopy(y)
-        corruption_indices = self.get_corruption_indices(preds, indices)
+        corruption_indices = self.get_corruption_indices(preds, sample_indices)
         y[corruption_indices] = 1
 
         return y
