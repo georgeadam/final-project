@@ -7,8 +7,8 @@ from .label_corruptor import LabelCorruptor
 
 
 class Aligned(LabelCorruptor):
-    def __init__(self, sample_limit):
-        super().__init__(sample_limit)
+    def __init__(self, sample_limit, seed):
+        super().__init__(sample_limit, seed)
 
     def corrupt_helper(self, preds, y, **kwargs):
         y = copy.deepcopy(y)

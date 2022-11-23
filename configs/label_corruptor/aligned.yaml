@@ -1,3 +1,4 @@
 name: aligned
 params:
     sample_limit: null
+    seed: 0

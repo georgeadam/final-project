@@ -7,8 +7,8 @@ from .label_corruptor import LabelCorruptor
 
 
 class NegativeBiasNoise(LabelCorruptor):
-    def __init__(self, noise_level, sample_limit):
-        super().__init__(sample_limit)
+    def __init__(self, noise_level, sample_limit, seed):
+        super().__init__(sample_limit, seed)
         self.noise_level = noise_level
 
     def corrupt_helper(self, preds, y, **kwargs):
@@ -20,7 +20,8 @@ class NegativeBiasNoise(LabelCorruptor):
 
     def get_corruption_indices(self, preds):
         indices = self.get_relevant_indices(preds)
-        indices = np.random.choice(indices, size=int(self.noise_level * len(indices)), replace=False)
+        random_state = np.random.RandomState(self.seed)
+        indices = random_state.choice(indices, size=int(self.noise_level * len(indices)), replace=False)
         indices = self.subset_indices(indices, self.sample_limit)
 
         return indices

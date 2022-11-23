@@ -7,8 +7,8 @@ from .label_corruptor import LabelCorruptor
 
 
 class ErrorAmplification(LabelCorruptor):
-    def __init__(self, corruption_prob, sample_limit):
-        super().__init__(sample_limit)
+    def __init__(self, corruption_prob, sample_limit, seed):
+        super().__init__(sample_limit, seed)
         self.corruption_prob = corruption_prob
 
     def corrupt_helper(self, preds, y, **kwargs):
@@ -20,7 +20,8 @@ class ErrorAmplification(LabelCorruptor):
 
     def get_corruption_indices(self, preds, y):
         indices = self.get_relevant_indices(preds, y)
-        indices = np.random.choice(indices, size=int(self.corruption_prob * len(indices)), replace=False)
+        random_state = np.random.RandomState(self.seed)
+        indices = random_state.choice(indices, size=int(self.corruption_prob * len(indices)), replace=False)
         indices = self.subset_indices(indices, self.sample_limit)
 
         return indices

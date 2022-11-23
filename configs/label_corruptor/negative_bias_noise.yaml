@@ -2,3 +2,4 @@ name: negative_bias_noise
 params:
     noise_level: 0.0
     sample_limit: null
+    seed: 0

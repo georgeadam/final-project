@@ -4,8 +4,9 @@ import numpy as np
 
 
 class LabelCorruptor:
-    def __init__(self, sample_limit=float("inf")):
+    def __init__(self, sample_limit=float("inf"), seed=0):
         self.sample_limit = sample_limit
+        self.seed = seed
 
     def corrupt(self, module, data_module, trainer, update_num):
         update_batch_dataloader = data_module.current_update_batch_dataloader(update_num)
@@ -28,7 +29,7 @@ class LabelCorruptor:
 
     def subset_indices(self, indices, sample_limit):
         if sample_limit is not None and len(indices) > sample_limit:
-            random_state = np.random.RandomState(0)
+            random_state = np.random.RandomState(self.seed)
             indices = random_state.choice(indices, min(len(indices), sample_limit), replace=False)
 
         return indices

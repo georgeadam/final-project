@@ -2,3 +2,4 @@ name: error_oscillation
 params:
     corruption_prob: 1.0
     sample_limit: null
+    seed: 0
