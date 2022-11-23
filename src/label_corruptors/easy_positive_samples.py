@@ -10,8 +10,8 @@ from .difficulty_corruptor import DifficultyCorruptor
 
 
 class EasyPositiveSamples(DifficultyCorruptor):
-    def __init__(self, counts_path, sample_limit, seed):
-        super().__init__(sample_limit, seed)
+    def __init__(self, counts_path, noise_tracker, sample_limit, seed):
+        super().__init__(noise_tracker, sample_limit, seed)
         self.counts = pd.read_csv(os.path.join(ROOT_DIR, counts_path))
 
     def corrupt_helper(self, preds, y, sample_indices, **kwargs):

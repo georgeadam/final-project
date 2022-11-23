@@ -4,7 +4,8 @@ import numpy as np
 
 
 class LabelCorruptor:
-    def __init__(self, sample_limit=float("inf"), seed=0):
+    def __init__(self, noise_tracker, sample_limit=float("inf"), seed=0):
+        self.noise_tracker = noise_tracker
         self.sample_limit = sample_limit
         self.seed = seed
 
@@ -13,6 +14,9 @@ class LabelCorruptor:
         probs, preds, y, sample_indices = trainer.make_predictions(module, dataloaders=update_batch_dataloader)
 
         new_y = self.corrupt_helper(probs=probs, preds=preds, y=y, sample_indices=sample_indices)
+        actual_indices = self.get_actual_indices(probs=probs, preds=preds, y=y, sample_indices=sample_indices)
+        potential_indices = self.get_potential_indices(probs=probs, preds=preds, y=y, sample_indices=sample_indices)
+        self.noise_tracker.track(update_num, actual_indices, potential_indices)
         data_module.overwrite_current_update_labels(new_y, update_num)
 
     @abc.abstractmethod

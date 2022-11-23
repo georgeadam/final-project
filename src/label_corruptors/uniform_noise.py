@@ -7,8 +7,8 @@ from .label_corruptor import LabelCorruptor
 
 
 class UniformNoise(LabelCorruptor):
-    def __init__(self, noise_level, sample_limit, seed):
-        super().__init__(sample_limit, seed)
+    def __init__(self, noise_level, noise_tracker, sample_limit, seed):
+        super().__init__(noise_tracker, sample_limit, seed)
         self.noise_level = noise_level
 
     def corrupt_helper(self, preds, y, **kwargs):
@@ -21,12 +21,12 @@ class UniformNoise(LabelCorruptor):
     def get_actual_indices(self, y, sample_indices, **kwargs):
         corruption_indices = self.get_corruption_indices(y)
 
-        return sample_indices[corruption_indices]
+        return list(sample_indices[corruption_indices])
 
     def get_potential_indices(self, y, sample_indices, **kwargs):
         potential_indices = self.get_relevant_indices(y)
 
-        return sample_indices[potential_indices]
+        return list(sample_indices[potential_indices])
 
     def get_corruption_indices(self, y):
         indices = self.get_relevant_indices(y)

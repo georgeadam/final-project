@@ -39,6 +39,7 @@ def main(args: DictConfig):
 
     prediction_tracker = trackers.create("prediction")
     metric_tracker = trackers.create("metric")
+    noise_tracker = trackers.create("noise")
 
     seed_everything(args.experiment.seed)
     data_module = data_modules.create(args.data_module.name, **args.data_module.params)
@@ -47,7 +48,8 @@ def main(args: DictConfig):
     model, module = initial_fit(args, data_module, metric_tracker, prediction_tracker, threshold_selector, wandb_logger)
 
     wandb_logger = WandbLogger(project="final_project", prefix="update")
-    update_model(args, data_module, metric_tracker, model, module, prediction_tracker, threshold_selector, wandb_logger)
+    update_model(args, data_module, metric_tracker, model, module, noise_tracker,
+                 prediction_tracker, threshold_selector, wandb_logger)
 
     wandb_logger.log_metrics({"eval_final/loss": metric_tracker.get_most_recent("loss"),
                               "eval_final/aupr": metric_tracker.get_most_recent("aupr"),
@@ -57,6 +59,7 @@ def main(args: DictConfig):
         wandb_logger.log_table("predictions", dataframe=prediction_tracker.get_table())
 
     wandb_logger.log_table("metrics", dataframe=metric_tracker.get_table())
+    wandb_logger.log_table("noisy_labels", dataframe=noise_tracker.get_table())
 
 
 def initial_fit(args, data_module, metric_tracker, prediction_tracker, threshold_selector, wandb_logger):
@@ -78,9 +81,10 @@ def initial_fit(args, data_module, metric_tracker, prediction_tracker, threshold
     return model, module
 
 
-def update_model(args, data_module, metric_tracker, model, module, prediction_tracker, threshold_selector,
-                 wandb_logger):
-    label_corruptor = label_corruptors.create(args.label_corruptor.name, **args.label_corruptor.params)
+def update_model(args, data_module, metric_tracker, model, module, noise_tracker,
+                 prediction_tracker, threshold_selector, wandb_logger):
+    label_corruptor = label_corruptors.create(args.label_corruptor.name, noise_tracker=noise_tracker,
+                                              **args.label_corruptor.params)
 
     for update_num in range(1, data_module.num_updates + 1):
         original_model = copy.deepcopy(model)

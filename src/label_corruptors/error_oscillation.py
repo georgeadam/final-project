@@ -7,8 +7,8 @@ from .label_corruptor import LabelCorruptor
 
 
 class ErrorOscillation(LabelCorruptor):
-    def __init__(self, corruption_prob, sample_limit, seed):
-        super().__init__(sample_limit, seed)
+    def __init__(self, corruption_prob, noise_tracker, sample_limit, seed):
+        super().__init__(noise_tracker, sample_limit, seed)
         self.corruption_prob = corruption_prob
 
     def corrupt_helper(self, preds, y, **kwargs):
@@ -21,12 +21,12 @@ class ErrorOscillation(LabelCorruptor):
     def get_actual_indices(self, preds, y, sample_indices, **kwargs):
         corruption_indices = self.get_corruption_indices(preds, y)
 
-        return sample_indices[corruption_indices]
+        return list(sample_indices[corruption_indices])
 
     def get_potential_indices(self, preds, y, sample_indices, **kwargs):
         potential_indices = self.get_relevant_indices(preds, y)
 
-        return sample_indices[potential_indices]
+        return list(sample_indices[potential_indices])
 
     def get_corruption_indices(self, preds, y):
         indices = self.get_relevant_indices(preds, y)
