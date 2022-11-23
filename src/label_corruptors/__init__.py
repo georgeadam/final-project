@@ -1,3 +1,4 @@
+from .aligned import Aligned
 from .clean import Clean
 from .creation import label_corruptors
 from .easy_negative_samples import EasyNegativeSamples
