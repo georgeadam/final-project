@@ -6,8 +6,14 @@ class Clean(LabelCorruptor):
     def __init__(self, *args, **kwargs):
         super().__init__()
 
-    def corrupt(self, module, data_module, trainer, update_num):
-        pass
+    def corrupt_helper(self, y, **kwargs):
+        return y
+
+    def get_actual_indices(self, *args, **kwargs):
+        return []
+
+    def get_potential_indices(self, *args, **kwargs):
+        return []
 
 
 label_corruptors.register_builder("clean", Clean)

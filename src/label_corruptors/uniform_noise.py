@@ -18,6 +18,16 @@ class UniformNoise(LabelCorruptor):
 
         return y
 
+    def get_actual_indices(self, y, sample_indices, **kwargs):
+        corruption_indices = self.get_corruption_indices(y)
+
+        return sample_indices[corruption_indices]
+
+    def get_potential_indices(self, y, sample_indices, **kwargs):
+        potential_indices = self.get_relevant_indices(y)
+
+        return sample_indices[potential_indices]
+
     def get_corruption_indices(self, y):
         indices = self.get_relevant_indices(y)
         random_state = np.random.RandomState(self.seed)

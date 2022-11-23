@@ -17,6 +17,16 @@ class Aligned(LabelCorruptor):
 
         return y
 
+    def get_actual_indices(self, preds, y, sample_indices, **kwargs):
+        corruption_indices = self.get_corruption_indices(preds, y)
+
+        return sample_indices[corruption_indices]
+
+    def get_potential_indices(self, preds, y, sample_indices, **kwargs):
+        potential_indices = self.get_relevant_indices(preds, y)
+
+        return sample_indices[potential_indices]
+
     def get_corruption_indices(self, preds, y):
         indices = self.get_relevant_indices(preds, y)
         indices = self.subset_indices(indices, self.sample_limit)

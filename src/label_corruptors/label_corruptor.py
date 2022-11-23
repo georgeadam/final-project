@@ -20,6 +20,14 @@ class LabelCorruptor:
         raise NotImplementedError
 
     @abc.abstractmethod
+    def get_actual_indices(self, *args, **kwargs):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_potential_indices(self, *args, **kwargs):
+        raise NotImplementedError
+
+    @abc.abstractmethod
     def get_corruption_indices(self, *args, **kwargs):
         raise NotImplementedError
 

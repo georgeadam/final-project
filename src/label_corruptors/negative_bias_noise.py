@@ -18,6 +18,16 @@ class NegativeBiasNoise(LabelCorruptor):
 
         return y
 
+    def get_actual_indices(self, preds, sample_indices, **kwargs):
+        corruption_indices = self.get_corruption_indices(preds)
+
+        return sample_indices[corruption_indices]
+
+    def get_potential_indices(self, preds, sample_indices, **kwargs):
+        potential_indices = self.get_relevant_indices(preds)
+
+        return sample_indices[potential_indices]
+
     def get_corruption_indices(self, preds):
         indices = self.get_relevant_indices(preds)
         random_state = np.random.RandomState(self.seed)
