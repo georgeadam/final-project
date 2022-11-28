@@ -5,10 +5,10 @@ from .creation import models
 from .model import Model
 
 
-class ResNet50(Model):
+class ResNet18(Model):
     def __init__(self, warm_start, **kwargs):
         super().__init__(warm_start)
-        resnet = torchvision.models.resnet50(pretrained=False, num_classes=1)
+        resnet = torchvision.models.resnet18(pretrained=False, num_classes=1)
 
         self.relu = resnet.relu
         self.maxpool = resnet.maxpool
@@ -42,4 +42,4 @@ class ResNet50(Model):
         return x
 
 
-models.register_builder("resnet50", ResNet50)
+models.register_builder("resnet18", ResNet18)

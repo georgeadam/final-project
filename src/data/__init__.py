@@ -1,5 +1,6 @@
 from .adult import Adult
 from .california_housing import CaliforniaHousing
+from .cifar10 import CIFAR10
 from .cifar10_tabular import CIFAR10Tabular
 from .creation import data_modules
 from .diabetes import Diabetes

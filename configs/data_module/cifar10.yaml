@@ -1,0 +1,7 @@
+name: cifar10
+defaults:
+    - feeder@params.feeder_args: cumulative_static
+    - splitter@params.splitter_args: random
+params:
+    batch_size: 32
+    data_dir: data/cifar10
