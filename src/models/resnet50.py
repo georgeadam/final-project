@@ -25,6 +25,12 @@ class ResNet50(Model):
         self.fc = resnet.fc
 
     def forward(self, x):
+        x = self.embedding(x)
+        x = self.fc(x)
+
+        return x
+
+    def embedding(self, x):
         x = self.conv1(x)
         x = self.bn1(x)
         x = self.relu(x)
@@ -37,7 +43,6 @@ class ResNet50(Model):
 
         x = self.avgpool(x)
         x = torch.flatten(x, 1)
-        x = self.fc(x)
 
         return x
 

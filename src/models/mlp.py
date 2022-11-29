@@ -16,11 +16,15 @@ class MLP(Model):
             pass
 
     def forward(self, x):
+        x = self.embedding(x)
+        x = self.layers[-1](x)
+
+        return x
+
+    def embedding(self, x):
         for i in range(len(self.layers) - 1):
             x = self.layers[i](x)
             x = self.activation(x)
-
-        x = self.layers[-1](x)
 
         return x
 
@@ -28,12 +32,10 @@ class MLP(Model):
         if layers == 0:
             fc = torch.nn.ModuleList([torch.nn.Linear(data_dimension, 1)])
         elif layers == 1:
-            fc = torch.nn.ModuleList([torch.nn.Linear(data_dimension, 10),
-                                      torch.nn.Linear(10, 1)])
+            fc = torch.nn.ModuleList([torch.nn.Linear(data_dimension, 10), torch.nn.Linear(10, 1)])
         elif layers == 2:
-            fc = torch.nn.ModuleList([torch.nn.Linear(data_dimension, 20),
-                                      torch.nn.Linear(20, 10),
-                                      torch.nn.Linear(10, 1)])
+            fc = torch.nn.ModuleList(
+                [torch.nn.Linear(data_dimension, 20), torch.nn.Linear(20, 10), torch.nn.Linear(10, 1)])
         elif layers > 2:
             initial_hidden_units = 50 * (2 ** layers)
             fc = [torch.nn.Linear(data_dimension, initial_hidden_units)]
