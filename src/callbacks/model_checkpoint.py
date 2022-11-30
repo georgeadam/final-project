@@ -5,11 +5,11 @@ from .creation import callbacks
 
 class ModelCheckpoint(LightningModelCheckpoint):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs, monitor="val/loss", mode="min")
+        super().__init__(*args, **kwargs, monitor=None, mode="min")
 
     def setup(self, trainer, pl_module, stage=None) -> None:
         self.dirpath = "checkpoints"
-        self.filename = "{epoch}" + "-" + "update_num={}".format(trainer.update_num)
+        self.filename = "{step}" + "-" + "update_num={}".format(trainer.update_num)
         super().setup(trainer, pl_module, stage)
 
 
