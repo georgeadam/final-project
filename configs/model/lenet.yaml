@@ -1,0 +1,3 @@
+name: lenet
+params:
+    warm_start: true
