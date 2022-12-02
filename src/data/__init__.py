@@ -8,4 +8,5 @@ from .higgs import Higgs
 from .mimic_iv import MIMICIV
 from .miniboone import Miniboone
 from .numerai import Numerai
+from .svhn import SVHN
 from .waterbirds import Waterbirds
