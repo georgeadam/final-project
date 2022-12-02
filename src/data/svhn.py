@@ -28,7 +28,7 @@ class SVHN(DataModule):
             x = np.concatenate([train_data.data, test_data.data])
             y = np.concatenate([np.array(train_data.labels), np.array(test_data.labels)])
 
-            neg_indices = y == 1
+            neg_indices = y == 4
             pos_indices = y == 9
 
             x = x[neg_indices | pos_indices]
@@ -56,7 +56,7 @@ class SVHN(DataModule):
         normalize = transforms.Normalize(mean=dataset_mean, std=dataset_std)
 
         self.train_transform = transforms.Compose([Transpose(),
-                                                   PILImage(),
+                                                   PILImage(None),
                                                    transforms.RandomCrop(32, padding=4),
                                                    transforms.RandomHorizontalFlip(),
                                                    transforms.ToTensor(),
@@ -70,7 +70,7 @@ class SVHN(DataModule):
         normalize = transforms.Normalize(mean=dataset_mean, std=dataset_std)
 
         self.inference_transform = transforms.Compose([Transpose(),
-                                                       PILImage(),
+                                                       PILImage(None),
                                                        transforms.ToTensor(),
                                                        normalize])
         self.inference_target_transform = None

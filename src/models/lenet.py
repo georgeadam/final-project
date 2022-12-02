@@ -13,7 +13,12 @@ class LeNet(Model):
         else:
             in_features = 600
 
-        self.conv1 = nn.Conv2d(in_channels=data_dimension[0], out_channels=16, kernel_size=5)
+        if len(data_dimension) == 3:
+            num_channels = data_dimension[0]
+        else:
+            num_channels = 1
+
+        self.conv1 = nn.Conv2d(in_channels=num_channels, out_channels=16, kernel_size=5)
         self.conv2 = nn.Conv2d(in_channels=16, out_channels=24, kernel_size=5)
         self.maxpool1 = nn.MaxPool2d(kernel_size=2, stride=2)
         self.maxpool2 = nn.MaxPool2d(kernel_size=2, stride=2)

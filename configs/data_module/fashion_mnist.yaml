@@ -1,0 +1,7 @@
+name: fashion_mnist
+defaults:
+    - feeder@params.feeder_args: cumulative_static
+    - splitter@params.splitter_args: random
+params:
+    batch_size: 32
+    data_dir: data/fashion_mnist
