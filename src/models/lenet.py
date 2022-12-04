@@ -30,6 +30,12 @@ class LeNet(Model):
         self.relu = nn.ReLU()
 
     def forward(self, x):
+        x = self.embedding(x)
+        x = self.fc3(x)
+
+        return x
+
+    def embedding(self, x):
         x = self.conv1(x)
         x = self.relu(x)
         x = self.maxpool1(x)
@@ -44,7 +50,7 @@ class LeNet(Model):
         x = self.fc2(x)
         x = self.relu(x)
 
-        return self.fc3(x)
+        return x
 
 
 models.register_builder("lenet", LeNet)
