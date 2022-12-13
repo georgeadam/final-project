@@ -46,5 +46,29 @@ class ResNet50(Model):
 
         return x
 
+    def freeze_classification_layer(self):
+        self.fc.requires_grad_(False)
+
+    def freeze_embedding_layers(self):
+        self.conv1.requires_grad_(False)
+        self.bn1.requires_grad_(False)
+
+        self.layer1.requires_grad_(False)
+        self.layer2.requires_grad_(False)
+        self.layer3.requires_grad_(False)
+        self.layer4.requires_grad_(False)
+
+    def unfreeze_classification_layer(self):
+        self.fc.requires_grad_(True)
+
+    def unfreeze_embedding_layers(self):
+        self.conv1.requires_grad_(True)
+        self.bn1.requires_grad_(True)
+
+        self.layer1.requires_grad_(True)
+        self.layer2.requires_grad_(True)
+        self.layer3.requires_grad_(True)
+        self.layer4.requires_grad_(True)
+
 
 models.register_builder("resnet50", ResNet50)

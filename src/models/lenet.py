@@ -52,5 +52,26 @@ class LeNet(Model):
 
         return x
 
+    def freeze_classification_layer(self):
+        self.fc3.requires_grad_(False)
+
+    def freeze_embedding_layers(self):
+        self.conv1.requires_grad_(False)
+        self.conv2.requires_grad_(False)
+
+        self.fc1.requires_grad_(False)
+        self.fc2.requires_grad_(False)
+
+    def unfreeze_classification_layer(self):
+        self.fc3.requires_grad_(True)
+
+    def unfreeze_embedding_layers(self):
+        self.conv1.requires_grad_(True)
+        self.conv2.requires_grad_(True)
+
+        self.fc1.requires_grad_(True)
+        self.fc2.requires_grad_(True)
+
 
 models.register_builder("lenet", LeNet)
+

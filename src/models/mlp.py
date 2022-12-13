@@ -54,5 +54,19 @@ class MLP(Model):
 
         return fc
 
+    def freeze_classification_layer(self):
+        self.layers[-1].requires_grad_(False)
+
+    def freeze_embedding_layers(self):
+        for i in range(len(self.layers) - 1):
+            self.layers[i].requires_grad_(False)
+
+    def unfreeze_classification_layer(self):
+        self.layers[-1].requires_grad_(True)
+
+    def unfreeze_embedding_layers(self):
+        for i in range(len(self.layers) - 1):
+            self.layers[i].requires_grad_(True)
+
 
 models.register_builder("mlp", MLP)
