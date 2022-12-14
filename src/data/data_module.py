@@ -56,7 +56,7 @@ class DataModule(LightningDataModule):
 
     def get_dataloader_by_partition(self, partition, update_num):
         if partition == "train":
-            return self.train_transform(update_num)
+            return self.train_dataloader(update_num)
         elif partition == "val":
             return self.val_dataloader(update_num)
         elif partition == "eval":
