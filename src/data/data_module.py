@@ -33,6 +33,13 @@ class DataModule(LightningDataModule):
 
         return DataLoader(dataset, batch_size=self.batch_size, shuffle=True)
 
+    def train_inference_dataloader(self, update_num=None):
+        x, y, indices = self.data_feeder.get_train_data(update_num)
+        dataset = self.data_wrapper(x, y, indices, transform=self.inference_transform,
+                                    target_transform=self.inference_target_transform)
+
+        return DataLoader(dataset, batch_size=self.batch_size, shuffle=False)
+
     def val_dataloader(self, update_num=None):
         x, y, indices = self.data_feeder.get_val_data(update_num)
         dataset = self.data_wrapper(x, y, indices, transform=self.inference_transform,
@@ -57,6 +64,8 @@ class DataModule(LightningDataModule):
     def get_dataloader_by_partition(self, partition, update_num):
         if partition == "train":
             return self.train_dataloader(update_num)
+        elif partition == "train_inference":
+            return self.train_inference_dataloader(update_num)
         elif partition == "val":
             return self.val_dataloader(update_num)
         elif partition == "eval":
