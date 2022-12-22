@@ -47,10 +47,11 @@ def main(args: DictConfig):
 
     model, module = initial_fit(args, data_module, metric_tracker, prediction_tracker, threshold_selector, wandb_logger)
 
-    wandb_logger = WandbLogger(project="final_project", prefix="update")
-    update_model(args, data_module, metric_tracker, model, module, noise_tracker,
-                 prediction_tracker, threshold_selector, wandb_logger)
 
+    update_model(args, data_module, metric_tracker, model, module, noise_tracker,
+                 prediction_tracker, threshold_selector)
+
+    wandb_logger = WandbLogger(project="final_project")
     wandb_logger.log_metrics({"eval_final/loss": metric_tracker.get_most_recent("loss"),
                               "eval_final/aupr": metric_tracker.get_most_recent("aupr"),
                               "eval_final/auc": metric_tracker.get_most_recent("auc")})
@@ -82,13 +83,14 @@ def initial_fit(args, data_module, metric_tracker, prediction_tracker, threshold
 
 
 def update_model(args, data_module, metric_tracker, model, module, noise_tracker,
-                 prediction_tracker, threshold_selector, wandb_logger):
+                 prediction_tracker, threshold_selector):
     label_corruptor = label_corruptors.create(args.label_corruptor.name, noise_tracker=noise_tracker,
                                               **args.label_corruptor.params)
 
     for update_num in range(1, data_module.num_updates + 1):
         original_model = copy.deepcopy(model)
         callbacks_list = [callbacks.create(value.name, **value.params) for key, value in args.update_callback.items()]
+        wandb_logger = WandbLogger(project="final_project", prefix="update-{}".format(update_num))
         trainer = trainers.create(args.update_trainer.name, update_num=update_num, callbacks=callbacks_list,
                                   logger=wandb_logger, **args.update_trainer.params)
 
