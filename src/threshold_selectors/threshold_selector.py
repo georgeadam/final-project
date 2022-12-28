@@ -11,11 +11,11 @@ class ThresholdSelector:
     # just for the purpose of getting probs and labels to feed into the threshold selector, then the threshold selector
     # itself will have to take as arguments the module, data_module, and trainer, just like the corruptors do, so that
     # it does a forward pass on the appropriate data
-    def select_threshold(self, module, data_module, trainer, update_num):
+    def select_threshold(self, model, data_module, inferer, update_num):
         val_dataloader = data_module.val_dataloader(update_num)
-        probs, _, y, _ = trainer.make_predictions(module, dataloaders=val_dataloader)
+        probs, _, y, _ = inferer.make_predictions(model, dataloaders=val_dataloader)
 
-        module.model.threshold = self._select_threshold_helper(probs, y)
+        model.threshold = self._select_threshold_helper(probs, y)
 
     @abc.abstractmethod
     def _select_threshold_helper(self, probs, y):

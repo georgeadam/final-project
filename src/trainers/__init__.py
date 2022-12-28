@@ -1,2 +1,2 @@
 from .creation import trainers
-from .pytorch import PyTorchTrainer
+from .pytorch import PyTorch

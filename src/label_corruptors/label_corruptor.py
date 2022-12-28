@@ -9,9 +9,9 @@ class LabelCorruptor:
         self.sample_limit = sample_limit
         self.seed = seed
 
-    def corrupt(self, module, data_module, trainer, update_num):
+    def corrupt(self, model, data_module, inferer, update_num):
         update_batch_dataloader = data_module.current_update_batch_dataloader(update_num)
-        probs, preds, y, sample_indices = trainer.make_predictions(module, dataloaders=update_batch_dataloader)
+        probs, preds, y, sample_indices = inferer.make_predictions(model, dataloaders=update_batch_dataloader)
 
         new_y = self.corrupt_helper(probs=probs, preds=preds, y=y, sample_indices=sample_indices)
         actual_indices = self.get_actual_indices(probs=probs, preds=preds, y=y, sample_indices=sample_indices)

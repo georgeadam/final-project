@@ -3,7 +3,7 @@ defaults:
     - callback: model_saving
     - data_module: adult
     - experiment: model_saving
-    - label_corruptor: clean
+    - inferer: standard
     - model: mlp
     - module: standard
     - threshold_selector: naive

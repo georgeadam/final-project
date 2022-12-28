@@ -3,7 +3,7 @@ defaults:
     - callback: default
     - data_module: adult
     - experiment: prediction_extraction
-    - label_corruptor: clean
+    - inferer: standard
     - model: mlp
     - module: standard
     - threshold_selector: naive
