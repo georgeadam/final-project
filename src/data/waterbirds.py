@@ -37,7 +37,7 @@ class Waterbirds(DataModule):
             splits["update"] = np.where(numeric_splits == 1)[0]
             splits["test"] = np.where(numeric_splits == 2)[0]
 
-            y = y.astype("float32")
+            y = y.astype(int)
             indices = np.arange(len(x))
 
             splitter = splitters.create(self._splitter_args.name, splits=splits, **self._splitter_args.params)
@@ -47,6 +47,7 @@ class Waterbirds(DataModule):
             self.data_wrapper = LazyDataset
             self._num_updates = self.data_feeder.num_updates
             self._data_dimension = 224
+            self._num_classes = 2
 
             self.update_transforms(0)
 

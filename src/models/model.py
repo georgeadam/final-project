@@ -4,27 +4,25 @@ import torch
 class Model(torch.nn.Module):
     def __init__(self, warm_start, *args, **kwargs):
         super().__init__()
-        self._threshold = 0.5
         self._warm_start = warm_start
 
     def predict(self, *args):
-        probs = self.predict_proba(*args)
+        with torch.no_grad():
+            output = self.forward(*args)
 
-        return (probs > self.threshold).int()
+        preds = torch.argmax(output, dim=1)
+
+        return preds
 
     def predict_proba(self, *args):
         with torch.no_grad():
             output = self.forward(*args)
 
-        return torch.sigmoid(output[:, 0])
+        preds = torch.argmax(output, dim=1)
+        probs = torch.nn.Softmax(dim=1)(output)
+        sample_indices = torch.arange(len(probs))
 
-    @property
-    def threshold(self):
-        return self._threshold
-
-    @threshold.setter
-    def threshold(self, new_threshold):
-        self._threshold = new_threshold
+        return probs[sample_indices, preds]
 
     @property
     def warm_start(self):

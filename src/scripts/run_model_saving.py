@@ -14,7 +14,6 @@ from src.data import data_modules
 from src.inferers import inferers
 from src.models import models
 from src.modules import modules
-from src.threshold_selectors import threshold_selectors
 from src.trackers import trackers
 from src.trainers import trainers
 from src.utils.hydra import get_wandb_run
@@ -38,20 +37,20 @@ def main(args: DictConfig):
 
     inferer = inferers.create(args.inferer.name, **args.inferer.params)
     prediction_tracker = trackers.create("prediction")
-    metric_tracker = trackers.create("metric")
+    metric_tracker = trackers.create("metric_multiclass")
 
     seed_everything(args.experiment.seed)
     data_module = data_modules.create(args.data_module.name, **args.data_module.params)
-    threshold_selector = threshold_selectors.create(args.threshold_selector.name, **args.threshold_selector.params)
 
-    initial_fit(args, data_module, inferer, metric_tracker, prediction_tracker, threshold_selector, wandb_logger)
+    initial_fit(args, data_module, inferer, metric_tracker, prediction_tracker, wandb_logger)
 
     wandb_logger.log_table("predictions", dataframe=prediction_tracker.get_table())
     wandb_logger.log_table("metrics", dataframe=metric_tracker.get_table())
 
 
-def initial_fit(args, data_module, inferer, metric_tracker, prediction_tracker, threshold_selector, wandb_logger):
-    model = models.create(args.model.name, data_dimension=data_module.data_dimension, **args.model.params)
+def initial_fit(args, data_module, inferer, metric_tracker, prediction_tracker, wandb_logger):
+    model = models.create(args.model.name, data_dimension=data_module.data_dimension,
+                          num_classes=data_module.num_classes, **args.model.params)
     module = modules.create(args.module.name, model=model, **args.module.params)
     callbacks_list = [callbacks.create(value.name, **value.params) for key, value in args.callback.items()]
     trainer = trainers.create(args.trainer.name, update_num=0, callbacks=callbacks_list, logger=wandb_logger,
@@ -59,12 +58,10 @@ def initial_fit(args, data_module, inferer, metric_tracker, prediction_tracker, 
     trainer.fit(module, train_dataloaders=data_module.train_dataloader(0),
                 val_dataloaders=data_module.val_dataloader(0))
 
-    threshold_selector.select_threshold(model, data_module, inferer, 0)
     prediction_tracker.track(model, data_module, inferer, "eval", 0)
     metric_tracker.track(model, data_module, inferer, "eval", 0)
     wandb_logger.log_metrics({"eval/loss": metric_tracker.get_most_recent("loss"),
-                              "eval/aupr": metric_tracker.get_most_recent("aupr"),
-                              "eval/auc": metric_tracker.get_most_recent("auc")})
+                              "eval/acc": metric_tracker.get_most_recent("acc")})
 
 
 if __name__ == "__main__":

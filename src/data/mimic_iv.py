@@ -52,7 +52,7 @@ class MIMICIV(DataModule):
             y = y.to_numpy()
 
             x = x.astype("float32")
-            y = y.astype("float32")
+            y = y.astype(int)
             indices = np.arange(len(x))
 
             splitter = splitters.create(self._splitter_args.name, **self._splitter_args.params)
@@ -62,6 +62,7 @@ class MIMICIV(DataModule):
             self.data_wrapper = EagerDataset
             self._num_updates = self.data_feeder.num_updates
             self._data_dimension = x.shape[1]
+            self._num_classes = 2
 
             self.update_transforms(0)
 

@@ -25,6 +25,7 @@ class DataModule(LightningDataModule):
         self._subgroup_features = None
         self._num_updates = None
         self._data_dimension = None
+        self._num_classes = None
 
     def train_dataloader(self, update_num=None):
         x, y, indices = self.data_feeder.get_train_data(update_num)
@@ -98,6 +99,10 @@ class DataModule(LightningDataModule):
     @property
     def data_dimension(self):
         return self._data_dimension
+
+    @property
+    def num_classes(self):
+        return self._num_classes
 
     @property
     def subgroup_features(self):

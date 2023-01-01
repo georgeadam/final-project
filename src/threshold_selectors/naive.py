@@ -1,6 +1,6 @@
 import numpy as np
 
-from src.utils.metric import get_metrics
+from src.utils.metric import get_metrics_binary
 from .creation import threshold_selectors
 from .threshold_selector import ThresholdSelector
 
@@ -25,7 +25,7 @@ class Naive(ThresholdSelector):
             threshold = thresholds[mid]
 
             temp_preds = probs >= threshold
-            rates = get_metrics(probs, temp_preds, y)
+            rates = get_metrics_binary(probs, temp_preds, y)
 
             direction = self._get_direction()
 
@@ -51,7 +51,7 @@ class Naive(ThresholdSelector):
         for threshold in thresholds:
             temp_preds = probs >= threshold
 
-            rates = get_metrics(probs, temp_preds, y)
+            rates = get_metrics_binary(probs, temp_preds, y)
 
             if abs(rates[self.desired_rate] - self.desired_value) <= best_diff:
                 best_diff = abs(rates[self.desired_rate] - self.desired_value)

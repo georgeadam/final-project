@@ -11,7 +11,7 @@ class Distillation(Module):
 
         self.original_model = original_model
         self.alpha = alpha
-        self.ce_loss_fn = torch.nn.BCEWithLogitsLoss()
+        self.ce_loss_fn = torch.nn.CrossEntropyLoss()
         self.distillation_loss_fn = DistillationLoss()
 
     def training_step(self, batch, batch_idx):
@@ -66,7 +66,7 @@ class Distillation(Module):
         return accuracy
 
     def _get_all_metrics(self, x, y):
-        logits = self.model(x).view(y.shape)
+        logits = self.model(x)
         loss, ce_loss, distillation_loss = self._get_loss(x, logits, y)
         accuracy = self._get_accuracy(x, y)
 
@@ -78,8 +78,8 @@ class DistillationLoss(object):
         pass
 
     def __call__(self, logits, old_logits):
-        probs = torch.nn.Sigmoid()(logits)
-        old_probs = torch.nn.Sigmoid()(old_logits)
+        probs = torch.nn.Softmax(dim=1)(logits)
+        old_probs = torch.nn.Softmax(dim=1)(old_logits)
 
         loss = old_probs * (- torch.log(probs))
         loss = torch.sum(loss, dim=1)

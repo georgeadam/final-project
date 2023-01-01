@@ -5,7 +5,7 @@ from .model import Model
 
 
 class LeNet(Model):
-    def __init__(self, data_dimension, warm_start):
+    def __init__(self, data_dimension, num_classes, warm_start):
         super().__init__(warm_start)
 
         if data_dimension[1] == 28:
@@ -25,7 +25,7 @@ class LeNet(Model):
 
         self.fc1 = nn.Linear(in_features=in_features, out_features=128)
         self.fc2 = nn.Linear(in_features=128, out_features=84)
-        self.fc3 = nn.Linear(84, 1)
+        self.fc3 = nn.Linear(84, num_classes)
 
         self.relu = nn.ReLU()
 

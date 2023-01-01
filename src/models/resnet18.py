@@ -6,9 +6,9 @@ from .model import Model
 
 
 class ResNet18(Model):
-    def __init__(self, warm_start, **kwargs):
+    def __init__(self, num_classes, warm_start, **kwargs):
         super().__init__(warm_start)
-        resnet = torchvision.models.resnet18(pretrained=False, num_classes=1)
+        resnet = torchvision.models.resnet18(pretrained=False, num_classes=num_classes)
 
         self.relu = resnet.relu
         self.maxpool = resnet.maxpool

@@ -9,7 +9,6 @@ defaults:
     - model: mlp
     - module@original_module: standard
     - module@update_module: standard
-    - threshold_selector: naive
     - trainer@original_trainer: pytorch
     - trainer@update_trainer: pytorch
 hydra:

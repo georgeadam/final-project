@@ -9,7 +9,7 @@ class Standard(Module):
     def __init__(self, model, optimizer_args, lr_scheduler_args, *args, **kwargs):
         super().__init__(model, optimizer_args, lr_scheduler_args)
 
-        self.loss_fn = torch.nn.BCEWithLogitsLoss()
+        self.loss_fn = torch.nn.CrossEntropyLoss()
 
     def training_step(self, batch, batch_idx):
         x, y, _ = batch
@@ -46,7 +46,7 @@ class Standard(Module):
         return accuracy
 
     def _get_all_metrics(self, x, y):
-        logits = self.model(x).view(y.shape)
+        logits = self.model(x)
         loss = self._get_loss(logits, y)
 
         accuracy = self._get_accuracy(x, y)

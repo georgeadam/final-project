@@ -16,7 +16,6 @@ from src.inferers import inferers
 from src.label_corruptors import label_corruptors
 from src.models import models
 from src.modules import modules
-from src.threshold_selectors import threshold_selectors
 from src.trackers import trackers
 from src.trainers import trainers
 from src.utils.hydra import get_wandb_run
@@ -40,24 +39,22 @@ def main(args: DictConfig):
 
     inferer = inferers.create(args.inferer.name, **args.inferer.params)
     prediction_tracker = trackers.create("prediction")
-    metric_tracker = trackers.create("metric")
+    metric_tracker = trackers.create("metric_multiclass")
     noise_tracker = trackers.create("noise")
 
     seed_everything(args.experiment.seed)
     data_module = data_modules.create(args.data_module.name, **args.data_module.params)
-    threshold_selector = threshold_selectors.create(args.threshold_selector.name, **args.threshold_selector.params)
 
     model = initial_fit(args, data_module, inferer, metric_tracker,
-                        prediction_tracker, threshold_selector, wandb_logger)
+                        prediction_tracker, wandb_logger)
 
 
     update_model(args, data_module, inferer, metric_tracker, model, noise_tracker,
-                 prediction_tracker, threshold_selector)
+                 prediction_tracker)
 
     wandb_logger = WandbLogger(project="final_project")
     wandb_logger.log_metrics({"eval_final/loss": metric_tracker.get_most_recent("loss"),
-                              "eval_final/aupr": metric_tracker.get_most_recent("aupr"),
-                              "eval_final/auc": metric_tracker.get_most_recent("auc")})
+                              "eval_final/acc": metric_tracker.get_most_recent("acc")})
 
     if args.experiment.save_predictions:
         wandb_logger.log_table("predictions", dataframe=prediction_tracker.get_table())
@@ -66,8 +63,9 @@ def main(args: DictConfig):
     wandb_logger.log_table("noisy_labels", dataframe=noise_tracker.get_table())
 
 
-def initial_fit(args, data_module, inferer, metric_tracker, prediction_tracker, threshold_selector, wandb_logger):
-    model = models.create(args.model.name, data_dimension=data_module.data_dimension, **args.model.params)
+def initial_fit(args, data_module, inferer, metric_tracker, prediction_tracker, wandb_logger):
+    model = models.create(args.model.name, data_dimension=data_module.data_dimension,
+                          num_classes=data_module.num_classes, **args.model.params)
     module = modules.create(args.original_module.name, model=model, **args.original_module.params)
 
     callbacks_list = [callbacks.create(value.name, **value.params) for key, value in args.original_callback.items()]
@@ -76,17 +74,15 @@ def initial_fit(args, data_module, inferer, metric_tracker, prediction_tracker, 
     trainer.fit(module, train_dataloaders=data_module.train_dataloader(0),
                 val_dataloaders=data_module.val_dataloader(0))
 
-    threshold_selector.select_threshold(model, data_module, inferer, 0)
     prediction_tracker.track(model, data_module, inferer, "eval", 0)
     metric_tracker.track(model, data_module, inferer, "eval", 0)
     wandb_logger.log_metrics({"eval_original/loss": metric_tracker.get_most_recent("loss"),
-                              "eval_original/aupr": metric_tracker.get_most_recent("aupr"),
-                              "eval_original/auc": metric_tracker.get_most_recent("auc")})
+                              "eval_original/acc": metric_tracker.get_most_recent("acc")})
     return model
 
 
 def update_model(args, data_module, inferer, metric_tracker, model, noise_tracker,
-                 prediction_tracker, threshold_selector):
+                 prediction_tracker):
     label_corruptor = label_corruptors.create(args.label_corruptor.name, noise_tracker=noise_tracker,
                                               **args.label_corruptor.params)
 
@@ -100,7 +96,8 @@ def update_model(args, data_module, inferer, metric_tracker, model, noise_tracke
         data_module.update_transforms(update_num)
 
         if not model.warm_start:
-            model = models.create(args.model.name, data_dimension=data_module.data_dimension, **args.model.params)
+            model = models.create(args.model.name, data_dimension=data_module.data_dimension,
+                                  num_classes=data_module.num_classes, **args.model.params)
 
         wandb_logger = WandbLogger(project="final_project", prefix="update-{}".format(update_num))
         trainer = trainers.create(args.update_trainer.name, update_num=update_num, callbacks=callbacks_list,
@@ -110,7 +107,6 @@ def update_model(args, data_module, inferer, metric_tracker, model, noise_tracke
         trainer.fit(module, train_dataloaders=data_module.train_dataloader(update_num),
                     val_dataloaders=data_module.val_dataloader(update_num))
 
-        threshold_selector.select_threshold(model, data_module, inferer, update_num)
         prediction_tracker.track(model, data_module, inferer, "eval", update_num)
         metric_tracker.track(model, data_module, inferer, "eval", update_num)
 

@@ -5,11 +5,11 @@ from .model import Model
 
 
 class FCN(Model):
-    def __init__(self, data_dimension, num_units, activation, warm_start):
+    def __init__(self, data_dimension, num_units, num_classes, activation, warm_start):
         super().__init__(warm_start)
 
         self.activation = getattr(torch.nn, activation)()
-        self.layers = self._create_layers(num_units, data_dimension)
+        self.layers = self._create_layers(data_dimension, num_units, num_classes)
 
     def forward(self, x):
         x = self.embedding(x)
@@ -24,8 +24,8 @@ class FCN(Model):
 
         return x
 
-    def _create_layers(self, num_units, data_dimension):
-        fc = torch.nn.ModuleList([torch.nn.Linear(data_dimension, num_units), torch.nn.Linear(num_units, 1)])
+    def _create_layers(self, data_dimension, num_units, num_classes):
+        fc = torch.nn.ModuleList([torch.nn.Linear(data_dimension, num_units), torch.nn.Linear(num_units, num_classes)])
 
         return fc
 

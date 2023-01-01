@@ -36,7 +36,7 @@ class CIFAR10(DataModule):
             y[neg_indices] = 0
             y[pos_indices] = 1
             y = y[neg_indices | pos_indices]
-            y = y.astype("float32")
+            y = y.astype(int)
             indices = np.arange(len(x))
 
             splitter = splitters.create(self._splitter_args.name, **self._splitter_args.params)
@@ -46,6 +46,7 @@ class CIFAR10(DataModule):
             self.data_wrapper = EagerDataset
             self._num_updates = self.data_feeder.num_updates
             self._data_dimension = x.shape[1]
+            self._num_classes = 2
 
             self.update_transforms(0)
 

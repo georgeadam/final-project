@@ -3,7 +3,7 @@ from numba import jit
 from sklearn.metrics import average_precision_score, balanced_accuracy_score
 
 
-def get_metrics(probs, preds, y):
+def get_metrics_binary(probs, preds, y):
     samples = float(len(y))
     tn, fp, fn, tp = confusion_matrix_custom(y, preds)
 
@@ -44,6 +44,15 @@ def get_metrics(probs, preds, y):
     rates = {"tnr": tnr, "fpr": fpr, "fnr": fnr, "tpr": tpr, "precision": precision, "recall": recall, "f1": f1,
              "auc": auc, "aupr": aupr, "loss": None, "fp_conf": fp_conf, "pos_conf": pos_conf, "fp_count": fp_count,
              "total_samples": total_samples, "acc": acc, "detection": None, "youden": youden}
+
+    return rates
+
+
+def get_metrics_multiclass(preds, y):
+    total_samples = len(y)
+    acc = np.sum(preds == y) / total_samples
+
+    rates = {"acc": acc, "total_samples": total_samples, "loss": None}
 
     return rates
 

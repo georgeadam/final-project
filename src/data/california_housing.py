@@ -43,7 +43,7 @@ class CaliforniaHousing(DataModule):
             y[y > median_price] = 1
 
             x = x.astype("float32")
-            y = y.astype("float32")
+            y = y.astype(int)
             indices = np.arange(len(x))
 
             splitter = splitters.create(self._splitter_args.name, **self._splitter_args.params)
@@ -53,6 +53,7 @@ class CaliforniaHousing(DataModule):
             self.data_wrapper = EagerDataset
             self._num_updates = self.data_feeder.num_updates
             self._data_dimension = x.shape[1]
+            self._num_classes = 2
 
             self.update_transforms(0)
 

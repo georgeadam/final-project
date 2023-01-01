@@ -38,7 +38,7 @@ class Diabetes(DataModule):
             self._numeric_cols = get_numeric_col_indices(x)
 
             x = x.to_numpy().astype("float32")
-            y = y.to_numpy().astype("float32")
+            y = y.to_numpy().astype(int)
             indices = np.arange(len(x))
 
             splitter = splitters.create(self._splitter_args.name, **self._splitter_args.params)
@@ -48,6 +48,7 @@ class Diabetes(DataModule):
             self.data_wrapper = EagerDataset
             self._num_updates = self.data_feeder.num_updates
             self._data_dimension = x.shape[1]
+            self._num_classes = 2
 
             self.update_transforms(0)
 

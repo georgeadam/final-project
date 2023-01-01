@@ -6,7 +6,6 @@ defaults:
     - inferer: standard
     - model: mlp
     - module: standard
-    - threshold_selector: naive
     - trainer: pytorch
 hydra:
     run:

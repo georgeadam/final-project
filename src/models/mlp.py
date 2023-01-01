@@ -5,13 +5,13 @@ from .model import Model
 
 
 class MLP(Model):
-    def __init__(self, data_dimension, layers, activation, warm_start):
+    def __init__(self, data_dimension, num_classes, layers, activation, warm_start):
         super().__init__(warm_start)
 
         self.activation = getattr(torch.nn, activation)()
 
         try:
-            self.layers = self._create_layers(layers, data_dimension)
+            self.layers = self._create_layers(layers, data_dimension, num_classes)
         except Exception:
             pass
 
@@ -28,7 +28,7 @@ class MLP(Model):
 
         return x
 
-    def _create_layers(self, layers, data_dimension):
+    def _create_layers(self, layers, data_dimension, num_classes):
         if layers == 0:
             fc = torch.nn.ModuleList([torch.nn.Linear(data_dimension, 1)])
         elif layers == 1:
@@ -47,7 +47,7 @@ class MLP(Model):
 
                 prev_hidden_units = next_hidden_units
 
-            fc.append(torch.nn.Linear(prev_hidden_units, 1))
+            fc.append(torch.nn.Linear(prev_hidden_units, num_classes))
             fc = torch.nn.ModuleList(fc)
         else:
             raise Exception("Number of layers cannot be negative")
