@@ -5,14 +5,18 @@ from pytorch_lightning import LightningDataModule
 from torch.utils.data import DataLoader
 
 from settings import ROOT_DIR
+from .feeders import feeders
+from .splitters import splitters
 
 
 class DataModule(LightningDataModule):
-    def __init__(self, data_dir, batch_size):
+    def __init__(self, data_dir, batch_size, feeder_args, splitter_args):
         super().__init__()
 
         self.data_dir = os.path.join(ROOT_DIR, data_dir)
         self.batch_size = batch_size
+        self._feeder_args = feeder_args
+        self._splitter_args = splitter_args
 
         self.data_feeder = None
         self.data_wrapper = None
@@ -23,9 +27,16 @@ class DataModule(LightningDataModule):
         self.inference_target_transform = None
 
         self._subgroup_features = None
-        self._num_updates = None
+        self._num_updates = feeder_args.params.num_updates
         self._data_dimension = None
         self._num_classes = None
+
+    def setup(self, stage=None):
+        if self.data_feeder is None:
+            x, y = self.load_data()
+            self.data_feeder = self.create_feeder(x, y)
+            self.set_stats(x, y)
+            self.update_transforms(0)
 
     def train_dataloader(self, update_num=None):
         x, y, indices = self.data_feeder.get_train_data(update_num)
@@ -107,3 +118,18 @@ class DataModule(LightningDataModule):
     @property
     def subgroup_features(self):
         return self._subgroup_features
+
+    @abc.abstractmethod
+    def load_data(self):
+        raise NotImplementedError
+
+    def create_feeder(self, x, y):
+        splitter = splitters.create(self._splitter_args.name, **self._splitter_args.params)
+        splitted_data = splitter.split_data(x, y)
+        feeder = feeders.create(self._feeder_args.name, **self._feeder_args.params, splitted_data=splitted_data)
+
+        return feeder
+
+    @abc.abstractmethod
+    def set_stats(self, x, y):
+        raise NotImplementedError

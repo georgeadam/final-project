@@ -1,4 +1,7 @@
+import numpy as np
+
 from sklearn.model_selection import train_test_split
+
 
 from .creation import splitters
 from .splitter import SplitterInterface
@@ -10,7 +13,8 @@ class Random(SplitterInterface):
         self.n_update = n_update
         self.random_state = random_state
 
-    def split_data(self, x, y, indices):
+    def split_data(self, x, y):
+        indices = np.arange(len(x))
         n_train, n_update = self._data_sizes_to_counts(self.n_train, self.n_update, len(x))
         x_train, x_update, y_train, y_update, indices_train, indices_update = train_test_split(x,
                                                                                                y,
