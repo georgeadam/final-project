@@ -84,7 +84,7 @@ def initial_fit(args, data_module, inferer, metric_tracker, prediction_tracker, 
 def update_model(args, data_module, inferer, metric_tracker, model, noise_tracker,
                  prediction_tracker):
     label_corruptor = label_corruptors.create(args.label_corruptor.name, noise_tracker=noise_tracker,
-                                              **args.label_corruptor.params)
+                                              num_classes=data_module.num_classes, **args.label_corruptor.params)
 
     for update_num in range(1, data_module.num_updates + 1):
         original_model = copy.deepcopy(model)

@@ -13,7 +13,7 @@ class Aligned(LabelCorruptor):
     def corrupt_helper(self, preds, y, **kwargs):
         y = copy.deepcopy(y)
         indices = self.get_corruption_indices(preds, y)
-        y[indices] = 1 - y[indices]
+        y[indices] = preds[indices]
 
         return y
 
@@ -34,7 +34,7 @@ class Aligned(LabelCorruptor):
         return indices
 
     def get_relevant_indices(self, preds, y):
-        return np.where(np.logical_and(y == 0, preds == 1) | np.logical_and(y == 1, preds == 0))[0]
+        return np.where(y != preds)[0]
 
 
 label_corruptors.register_builder("aligned", Aligned)

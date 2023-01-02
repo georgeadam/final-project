@@ -4,16 +4,17 @@ import numpy as np
 
 from .creation import label_corruptors
 from .label_corruptor import LabelCorruptor
+from .utils import generate_multiclass_noisy_labels
 
 
 class Unaligned(LabelCorruptor):
-    def __init__(self, noise_tracker, sample_limit, seed):
-        super().__init__(noise_tracker, sample_limit, seed)
+    def __init__(self, noise_tracker, num_classes, sample_limit, seed):
+        super().__init__(noise_tracker, num_classes, sample_limit, seed)
 
     def corrupt_helper(self, preds, y, **kwargs):
         y = copy.deepcopy(y)
         indices = self.get_corruption_indices(preds, y)
-        y[indices] = 1 - y[indices]
+        y[indices] = generate_multiclass_noisy_labels(y[indices], self.num_classes, self.seed)
 
         return y
 
@@ -34,7 +35,7 @@ class Unaligned(LabelCorruptor):
         return indices
 
     def get_relevant_indices(self, preds, y):
-        return np.where(np.logical_and(y == 1, preds == 1) | np.logical_and(y == 0, preds == 0))[0]
+        return np.where(y == preds)[0]
 
 
 label_corruptors.register_builder("unaligned", Unaligned)

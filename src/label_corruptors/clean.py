@@ -3,8 +3,8 @@ from .label_corruptor import LabelCorruptor
 
 
 class Clean(LabelCorruptor):
-    def __init__(self, noise_tracker, *args, **kwargs):
-        super().__init__(noise_tracker)
+    def __init__(self, noise_tracker, num_classes, *args, **kwargs):
+        super().__init__(noise_tracker, num_classes)
 
     def corrupt_helper(self, y, **kwargs):
         return y

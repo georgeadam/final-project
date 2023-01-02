@@ -7,8 +7,8 @@ from .label_corruptor import LabelCorruptor
 
 
 class PositiveBiasNoise(LabelCorruptor):
-    def __init__(self, noise_level, noise_tracker, sample_limit, seed):
-        super().__init__(noise_tracker, sample_limit, seed)
+    def __init__(self, noise_level, noise_tracker, num_classes, sample_limit, seed):
+        super().__init__(noise_tracker, num_classes, sample_limit, seed)
         self.noise_level = noise_level
 
     def corrupt_helper(self, preds, y, **kwargs):

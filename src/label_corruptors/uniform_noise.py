@@ -4,17 +4,18 @@ import numpy as np
 
 from .creation import label_corruptors
 from .label_corruptor import LabelCorruptor
+from .utils import generate_multiclass_noisy_labels
 
 
 class UniformNoise(LabelCorruptor):
-    def __init__(self, noise_level, noise_tracker, sample_limit, seed):
-        super().__init__(noise_tracker, sample_limit, seed)
+    def __init__(self, noise_level, noise_tracker, num_classes, sample_limit, seed):
+        super().__init__(noise_tracker, num_classes, sample_limit, seed)
         self.noise_level = noise_level
 
     def corrupt_helper(self, preds, y, **kwargs):
         y = copy.deepcopy(y)
         indices = self.get_corruption_indices(y)
-        y[indices] = 1 - y[indices]
+        y[indices] = generate_multiclass_noisy_labels(y[indices], self.num_classes, self.seed)
 
         return y
 
