@@ -25,5 +25,5 @@ class FashionMNISTBinary(FashionMNIST):
         return x, y
 
 
-data_modules.register_builder("fashion_mnist", FashionMNIST)
-data_modules.register_builder("fashion_mnist_binary", FashionMNIST)
+data_modules.register_builder("fashion_mnist", FashionMNISTBinary)
+data_modules.register_builder("fashion_mnist_binary", FashionMNISTBinary)
