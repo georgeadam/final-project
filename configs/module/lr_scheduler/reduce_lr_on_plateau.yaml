@@ -1,0 +1,3 @@
+name: reduce_lr_on_plateau
+params:
+    patience: 3
