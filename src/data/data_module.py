@@ -54,8 +54,8 @@ class DataModule(LightningDataModule):
 
     def train_initial_dataloader(self):
         x, y, indices = self.data_feeder.get_initial_train_data()
-        dataset = self.data_wrapper(x, y, indices, transform=self.train_transform,
-                                    target_transform=self.train_target_transform)
+        dataset = self.data_wrapper(x, y, indices, transform=self.inference_transform,
+                                    target_transform=self.inference_target_transform)
 
         return DataLoader(dataset, batch_size=self.batch_size, shuffle=False)
 
