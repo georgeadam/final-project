@@ -37,6 +37,9 @@ class Static(FeederInterface):
 
         return x, y, indices
 
+    def get_initial_train_data(self):
+        return self.x_train, self.y_train, self.indices_train
+
     def get_val_data(self, update_num):
         x, y, indices = self._get_all_data_for_split(update_num)
         _, x, _, y, _, indices = train_test_split(x, y, indices, test_size=self._val_percentage,
@@ -51,7 +54,10 @@ class Static(FeederInterface):
         return self._batch_fetcher.fetch(self.x_update, self.y_update, self.indices_update, update_num)
 
     def overwrite_current_update_labels(self, new_labels, update_num):
-        self._label_updater.update_labels(self.y_update, new_labels, update_num)
+        self._label_updater.overwrite_update_labels(self.y_update, new_labels, update_num)
+
+    def overwrite_train_labels(self, new_labels):
+        self._label_updater.overwrite_train_labels(self.y_train, new_labels)
 
     @abc.abstractmethod
     def _get_all_data_for_split(self, update_num):

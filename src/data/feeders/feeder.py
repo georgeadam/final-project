@@ -22,6 +22,10 @@ class FeederInterface(metaclass=abc.ABCMeta):
     def overwrite_current_update_labels(self, new_labels, update_num):
         raise NotImplementedError
 
+    @abc.abstractmethod
+    def overwrite_train_labels(self, new_labels):
+        raise NotImplementedError
+
     @property
     @abc.abstractmethod
     def num_updates(self):

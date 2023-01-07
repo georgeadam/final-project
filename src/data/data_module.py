@@ -52,6 +52,13 @@ class DataModule(LightningDataModule):
 
         return DataLoader(dataset, batch_size=self.batch_size, shuffle=False)
 
+    def train_initial_dataloader(self):
+        x, y, indices = self.data_feeder.get_initial_train_data()
+        dataset = self.data_wrapper(x, y, indices, transform=self.train_transform,
+                                    target_transform=self.train_target_transform)
+
+        return DataLoader(dataset, batch_size=self.batch_size, shuffle=False)
+
     def val_dataloader(self, update_num=None):
         x, y, indices = self.data_feeder.get_val_data(update_num)
         dataset = self.data_wrapper(x, y, indices, transform=self.inference_transform,
@@ -78,6 +85,8 @@ class DataModule(LightningDataModule):
             return self.train_dataloader(update_num)
         elif partition == "train_inference":
             return self.train_inference_dataloader(update_num)
+        elif partition == "train_initial":
+            return self.train_initial_dataloader()
         elif partition == "val":
             return self.val_dataloader(update_num)
         elif partition == "eval":
@@ -106,6 +115,9 @@ class DataModule(LightningDataModule):
 
     def overwrite_current_update_labels(self, new_labels, update_num):
         self.data_feeder.overwrite_current_update_labels(new_labels, update_num)
+
+    def overwrite_train_labels(self, new_labels):
+        self.data_feeder.overwrite_train_labels(new_labels)
 
     @property
     def data_dimension(self):
