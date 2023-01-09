@@ -2,6 +2,7 @@ import numpy as np
 
 from .batch_fetchers import StaticBatchFetcher
 from .creation import feeders
+from .input_updaters import StaticInputUpdater
 from .label_updaters import StaticLabelUpdater
 from .static import Static
 
@@ -10,6 +11,7 @@ class CumulativeStatic(Static):
     def __init__(self, splitted_data, val_percentage, num_updates, random_state):
         super().__init__(splitted_data, val_percentage, num_updates, random_state)
 
+        self._input_updater = StaticInputUpdater(num_updates)
         self._label_updater = StaticLabelUpdater(num_updates)
         self._batch_fetcher = StaticBatchFetcher(num_updates)
 

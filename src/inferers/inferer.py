@@ -8,5 +8,5 @@ class Inferer(Trainer, metaclass=abc.ABCMeta):
         super().__init__(**kwargs)
 
     @abc.abstractmethod
-    def make_predictions(self, model, dataloaders):
+    def make_predictions(self, *args):
         raise NotImplementedError

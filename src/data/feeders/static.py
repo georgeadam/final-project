@@ -23,6 +23,7 @@ class Static(FeederInterface):
         self._num_updates = num_updates
         self._random_state = random_state
 
+        self._input_updater = None
         self._label_updater = None
         self._batch_fetcher = None
 
@@ -58,6 +59,12 @@ class Static(FeederInterface):
 
     def overwrite_train_labels(self, new_labels):
         self._label_updater.overwrite_train_labels(self.y_train, new_labels)
+
+    def overwrite_current_update_inputs(self, new_inputs, indices, update_num):
+        self._input_updater.overwrite_update_inputs(self.x_update, new_inputs, indices, update_num)
+
+    def overwrite_train_inputs(self, new_inputs, indices):
+        self._input_updater.overwrite_train_inputs(self.x_train, new_inputs, indices)
 
     @abc.abstractmethod
     def _get_all_data_for_split(self, update_num):

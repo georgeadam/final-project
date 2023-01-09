@@ -23,6 +23,9 @@ class Module(LightningModule):
                                       **self._optimizer_args.params)
         lr_scheduler = lr_schedulers.create(self._lr_scheduler_args.name, optimizer=optimizer,
                                             **self._lr_scheduler_args.params)
+        lr_scheduler = {"scheduler": lr_scheduler,
+                        "monitor": "train/loss",
+                        }
 
         return [optimizer], [lr_scheduler]
 

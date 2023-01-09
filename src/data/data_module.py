@@ -119,6 +119,12 @@ class DataModule(LightningDataModule):
     def overwrite_train_labels(self, new_labels):
         self.data_feeder.overwrite_train_labels(new_labels)
 
+    def overwrite_current_update_inputs(self, new_inputs, indices, update_num):
+        self.data_feeder.overwrite_current_update_inputs(new_inputs, indices, update_num)
+
+    def overwrite_train_inputs(self, new_inputs, indices):
+        self.data_feeder.overwrite_train_inputs(new_inputs, indices)
+
     @property
     def data_dimension(self):
         return self._data_dimension

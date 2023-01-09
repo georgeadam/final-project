@@ -1,0 +1,6 @@
+name: uniform_noise
+defaults:
+    - applicator@params.applicator_args: clean
+params:
+    sample_limit: null
+    seed: 0

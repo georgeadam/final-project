@@ -1,0 +1,6 @@
+name: input
+params:
+    deterministic: true
+    gpus: 1
+    enable_checkpointing: false
+    enable_progress_bar: false

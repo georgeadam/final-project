@@ -1,2 +1,3 @@
 from .creation import inferers
-from .standard import Standard
+from .input import Input
+from .prediction import Prediction

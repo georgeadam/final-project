@@ -4,7 +4,9 @@ defaults:
     - callback@update_callback: default
     - data_module: adult
     - experiment: update_pipeline
-    - inferer: standard
+    - inferer@input_inferer: input
+    - inferer@prediction_inferer: prediction
+    - input_corruptor: clean
     - label_corruptor: uniform_noise
     - model: mlp
     - module@original_module: standard
