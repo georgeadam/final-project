@@ -1,0 +1,7 @@
+name: second_tercile
+defaults:
+    - applicator@params.applicator_args: clean
+params:
+    counts_path: "results/counts/temp.csv"
+    sample_limit: null
+    seed: 0
