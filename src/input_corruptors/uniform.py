@@ -18,7 +18,7 @@ class UniformNoise(InputCorruptor):
 
         return list(sample_indices[potential_indices])
 
-    def get_corruption_indices(self, x):
+    def get_corruption_indices(self, x, **kwargs):
         indices = self.get_relevant_indices(x)
         indices = self.subset_indices(indices, self.sample_limit)
 

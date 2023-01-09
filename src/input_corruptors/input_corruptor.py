@@ -40,7 +40,7 @@ class InputCorruptor:
 
     def corrupt_helper(self, x, sample_indices):
         x = copy.deepcopy(x)
-        corruption_indices = self.get_corruption_indices(sample_indices)
+        corruption_indices = self.get_corruption_indices(x=x, sample_indices=sample_indices)
         x = self.applicator.apply_corruption(x[corruption_indices])
 
         return x, corruption_indices

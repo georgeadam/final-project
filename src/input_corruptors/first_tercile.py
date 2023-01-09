@@ -5,10 +5,10 @@ import pandas as pd
 
 from settings import ROOT_DIR
 from .creation import input_corruptors
-from .input_corruptor import InputCorruptor
+from .difficulty_corruptor import DifficultyCorruptor
 
 
-class FirstTercile(InputCorruptor):
+class FirstTercile(DifficultyCorruptor):
     def __init__(self, counts_path, noise_tracker, applicator_args, sample_limit, seed):
         super().__init__(noise_tracker, applicator_args, sample_limit, seed)
         self.counts = pd.read_csv(os.path.join(ROOT_DIR, counts_path))
