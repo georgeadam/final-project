@@ -5,12 +5,7 @@ from .applicator import Applicator
 from .creation import applicators
 
 
-class Gaussian(Applicator):
-    def apply_corruption(self, x):
-        x = [self.corrupt_single_sample(x[i]) for i in range(len(x))]
-
-        return np.array(x)
-
+class GaussianNoise(Applicator):
     def corrupt_single_sample(self, x):
         x = torch.tensor(x)
         x = self.transform(x)
@@ -20,4 +15,4 @@ class Gaussian(Applicator):
         return np.clip(x + np.random.normal(size=x.shape, scale=c), 0, 1) * 255
 
 
-applicators.register_builder("gaussian", Gaussian)
+applicators.register_builder("gaussian_noise", GaussianNoise)
