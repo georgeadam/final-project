@@ -12,10 +12,10 @@ class Clean(InputCorruptor):
     def get_potential_indices(self, x, sample_indices):
         return []
 
-    def get_corruption_indices(self, x):
+    def get_corruption_indices(self, x, sample_indices):
         return []
 
-    def get_relevant_indices(self, x):
+    def get_relevant_indices(self, x, sample_indices):
         return []
 
 
