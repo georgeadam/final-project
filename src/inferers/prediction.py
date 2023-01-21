@@ -39,3 +39,4 @@ class Module(LightningModule):
 
 
 inferers.register_builder("prediction", Prediction)
+inferers.register_builder("standard", Prediction)

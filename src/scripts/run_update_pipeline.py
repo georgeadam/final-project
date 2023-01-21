@@ -60,11 +60,11 @@ def main(args: DictConfig):
                               "eval_final/acc": metric_tracker.get_most_recent("acc")})
 
     if args.experiment.save_predictions:
-        wandb_logger.log_table("predictions", dataframe=prediction_tracker.get_table())
+        prediction_tracker.get_table().to_csv("predictions.csv")
 
-    wandb_logger.log_table("metrics", dataframe=metric_tracker.get_table())
-    wandb_logger.log_table("noisy_labels", dataframe=label_noise_tracker.get_table())
-    wandb_logger.log_table("noisy_inputs", dataframe=input_noise_tracker.get_table())
+    metric_tracker.get_table().to_csv("metrics.csv")
+    label_noise_tracker.get_table().to_csv("label_noise.csv")
+    input_noise_tracker.get_table().to_csv("input_noise.csv")
 
 
 def initial_fit(args, data_module, prediction_inferer, metric_tracker, prediction_tracker, wandb_logger):
