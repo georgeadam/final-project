@@ -1,7 +1,8 @@
+import numpy as np
+import torch
+
 from .applicator import Applicator
 from .creation import applicators
-
-import torch
 
 
 class Clean(Applicator):
@@ -9,7 +10,7 @@ class Clean(Applicator):
         x = torch.tensor(x)
         x = self.transform(x)
 
-        return x
+        return np.array(x)
 
 
 applicators.register_builder("clean", Clean)
