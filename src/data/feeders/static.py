@@ -32,21 +32,13 @@ class Static(FeederInterface):
         return self._num_updates
 
     def get_train_data(self, update_num):
-        x, y, indices = self._get_all_data_for_split(update_num)
-        x, _, y, _, indices, _ = train_test_split(x, y, indices, test_size=self._val_percentage,
-                                                  random_state=self._random_state)
-
-        return x, y, indices
+        return self._get_train_data(update_num)
 
     def get_initial_train_data(self):
         return self.x_train, self.y_train, self.indices_train
 
     def get_val_data(self, update_num):
-        x, y, indices = self._get_all_data_for_split(update_num)
-        _, x, _, y, _, indices = train_test_split(x, y, indices, test_size=self._val_percentage,
-                                                  random_state=self._random_state)
-
-        return x, y, indices
+        return self._get_val_data(update_num)
 
     def get_eval_data(self, update_num):
         return self.x_test, self.y_test, self.indices_test
@@ -68,4 +60,12 @@ class Static(FeederInterface):
 
     @abc.abstractmethod
     def _get_all_data_for_split(self, update_num):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def _get_train_data(self, update_num):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def _get_val_data(self, update_num):
         raise NotImplementedError
