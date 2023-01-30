@@ -8,7 +8,7 @@ from .utils import generate_multiclass_noisy_labels
 
 
 class UniformNoise(LabelCorruptor):
-    def __init__(self, noise_level, noise_tracker, num_classes, sample_limit, seed):
+    def __init__(self, noise_level, noise_tracker, num_classes, sample_limit, seed, **kwargs):
         super().__init__(noise_tracker, num_classes, sample_limit, seed)
         self.noise_level = noise_level
 
