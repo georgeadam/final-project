@@ -59,10 +59,6 @@ class Static(FeederInterface):
         self._input_updater.overwrite_train_inputs(self.x_train, new_inputs, indices)
 
     @abc.abstractmethod
-    def _get_all_data_for_split(self, update_num):
-        raise NotImplementedError
-
-    @abc.abstractmethod
     def _get_train_data(self, update_num):
         raise NotImplementedError
 
