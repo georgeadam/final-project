@@ -1,0 +1,17 @@
+experiment_name: db_vs_embedding
+counts_path: ""
+params:
+    batch_size: 32
+    data_module: "fashion_mnist_multiclass"
+    early_stopping: 5
+    feeder: "cumulative_static"
+    label_corruptor: "aligned"
+    model: lenet
+    num_updates: 10
+    sample_limit: 1000
+    seed: 0
+    warm_start: True
+hydra:
+    run:
+        dir: results/${params.data_module}/${experiment_name}/${wandb_run:}
+    output_subdir: .
