@@ -2,8 +2,10 @@ from .brightness import Brightness
 from .clean import Clean
 from .contrast import Contrast
 from .creation import applicators
+from .elastic import Elastic
 from .gaussian_blur import GaussianBlur
 from .gaussian_noise import GaussianNoise
+from .glass_blur import GlassBlur
 from .impulse_noise import ImpulseNoise
 from .jpeg import Jpeg
 from .pixelate import Pixelate

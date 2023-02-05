@@ -5,7 +5,7 @@ from .input_corruptor import InputCorruptor
 
 
 class UniformNoise(InputCorruptor):
-    def __init__(self, noise_tracker, applicator_args, sample_limit, seed):
+    def __init__(self, noise_tracker, applicator_args, sample_limit, seed, **kwargs):
         super().__init__(noise_tracker, applicator_args, sample_limit, seed)
 
     def get_actual_indices(self, x, sample_indices):
