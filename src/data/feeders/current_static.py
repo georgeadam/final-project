@@ -37,17 +37,17 @@ class CurrentStatic(Static):
         if update_num == 0:
             x_train, y_train, indices_train = self.x_train, self.y_train, self.indices_train
 
-            _, x_train, _, y_train, _, indices_train = train_test_split(x_train, y_train, indices_train,
-                                                                        test_size=self._val_percentage,
-                                                                        random_state=self._random_state)
+            _, x_val, _, y_val, _, indices_val = train_test_split(x_train, y_train, indices_train,
+                                                                  test_size=self._val_percentage,
+                                                                  random_state=self._random_state)
 
-            return x_train, y_train, indices_train
+            return x_val, y_val, indices_val
         else:
             x_update, y_update, indices_update = self.get_current_update_batch(update_num)
 
             _, x_update, _, y_update, _, indices_update = train_test_split(x_update, y_update, indices_update,
-                                                                     test_size=self._val_percentage,
-                                                                     random_state=self._random_state)
+                                                                           test_size=self._val_percentage,
+                                                                           random_state=self._random_state)
 
             return x_update, y_update, indices_update
 

@@ -115,6 +115,7 @@ def update_model(args, data_module, prediction_inferer, input_inferer, metric_tr
                     val_dataloaders=data_module.val_dataloader(update_num))
 
         prediction_tracker.track(model, data_module, prediction_inferer, "train_inference", update_num)
+        prediction_tracker.track(model, data_module, prediction_inferer, "train_cumulative_inference", update_num)
         prediction_tracker.track(model, data_module, prediction_inferer, "val", update_num)
         prediction_tracker.track(model, data_module, prediction_inferer, "eval", update_num)
         metric_tracker.track(model, data_module, prediction_inferer, "eval", update_num)

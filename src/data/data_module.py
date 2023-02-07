@@ -52,6 +52,13 @@ class DataModule(LightningDataModule):
 
         return DataLoader(dataset, batch_size=self.batch_size, shuffle=False)
 
+    def train_cumulative_inference_dataloader(self, update_num=None):
+        x, y, indices = self.data_feeder.get_train_cumulative_data(update_num)
+        dataset = self.data_wrapper(x, y, indices, transform=self.inference_transform,
+                                    target_transform=self.inference_target_transform)
+
+        return DataLoader(dataset, batch_size=self.batch_size, shuffle=False)
+
     def train_initial_dataloader(self):
         x, y, indices = self.data_feeder.get_initial_train_data()
         dataset = self.data_wrapper(x, y, indices, transform=self.inference_transform,
@@ -85,6 +92,8 @@ class DataModule(LightningDataModule):
             return self.train_dataloader(update_num)
         elif partition == "train_inference":
             return self.train_inference_dataloader(update_num)
+        elif partition == "train_cumulative_inference":
+            return self.train_cumulative_inference_dataloader(update_num)
         elif partition == "train_initial":
             return self.train_initial_dataloader()
         elif partition == "val":
