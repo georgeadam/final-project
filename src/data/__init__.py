@@ -13,4 +13,5 @@ from .miniboone import Miniboone
 from .numerai import Numerai
 from .svhn_binary import SVHNBinary
 from .svhn_multiclass import SVHNMulticlass
+from .utkface import UTKFace
 from .waterbirds import Waterbirds
