@@ -78,6 +78,7 @@ def main(args: DictConfig):
     del clean_final_model
     del noisy_final_model
     clean_initial_model = get_model("initial", clean_config, clean_run, data_module)
+    clean_initial_model.freeze_embedding_layers()
     clean_fine_tune_model = fine_tune_model(clean_initial_model, clean_config, data_module,
                                             data_module.num_updates)
     clean_classification_fine_tune_metrics = compute_metrics_per_subgroup(clean_fine_tune_model, data_module, counts)
@@ -157,7 +158,6 @@ def fine_tune_model(model, config, data_module, update_num):
 
     args = config
     args.update_trainer.params.enable_progress_bar = False
-    args.update_trainer.params.max_epochs = 1
 
     seed_everything(0)
 
