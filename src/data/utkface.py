@@ -52,10 +52,6 @@ class UTKFace(DataModule):
         y = pd.read_csv(os.path.join(self.data_dir, "labels.csv"))
         y = y[self.task].to_numpy().astype(int)
 
-        good_indices = np.where(y < 1000)[0] # eliminate bad labels
-        x = x[good_indices]
-        y = y[good_indices]
-
         return x, y
 
 
