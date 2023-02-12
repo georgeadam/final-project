@@ -5,7 +5,7 @@ from .creation import callbacks
 
 class ModelCheckpoint(LightningModelCheckpoint):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs, monitor=None, mode="min")
+        super().__init__(*args, **kwargs, monitor="val/loss", mode="min")
 
     def setup(self, trainer, pl_module, stage=None) -> None:
         self.dirpath = "checkpoints"

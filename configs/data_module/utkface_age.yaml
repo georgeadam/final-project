@@ -4,5 +4,5 @@ defaults:
     - splitter@params.splitter_args: random
 params:
     batch_size: 32
-    data_dir: data/utkface
+    data_dir: data/utkface/processed
     task: "age"
