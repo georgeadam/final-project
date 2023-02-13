@@ -50,6 +50,7 @@ class UTKFace(DataModule):
             x = np.load(f)
 
         y = pd.read_csv(os.path.join(self.data_dir, "labels.csv"))
+        self._subgroup_features = y[["age", "gender", "race"]]
         y = y[self.task].to_numpy().astype(int)
 
         return x, y
