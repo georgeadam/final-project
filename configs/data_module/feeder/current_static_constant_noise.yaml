@@ -1,0 +1,5 @@
+name: current_static_constant_noise
+params:
+    num_updates: 5
+    random_state: 0
+    val_percentage: 0.2

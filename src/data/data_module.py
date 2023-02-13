@@ -122,11 +122,11 @@ class DataModule(LightningDataModule):
     def num_updates(self):
         return self._num_updates
 
-    def overwrite_current_update_labels(self, new_labels, update_num):
-        self.data_feeder.overwrite_current_update_labels(new_labels, update_num)
+    def overwrite_current_update_labels(self, new_labels, indices, update_num):
+        self.data_feeder.overwrite_current_update_labels(new_labels, indices, update_num)
 
-    def overwrite_train_labels(self, new_labels):
-        self.data_feeder.overwrite_train_labels(new_labels)
+    def overwrite_train_labels(self, new_labels, indices):
+        self.data_feeder.overwrite_train_labels(new_labels, indices)
 
     def overwrite_current_update_inputs(self, new_inputs, indices, update_num):
         self.data_feeder.overwrite_current_update_inputs(new_inputs, indices, update_num)

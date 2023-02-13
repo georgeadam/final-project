@@ -13,10 +13,10 @@ class ErrorAmplification(LabelCorruptor):
 
     def corrupt_helper(self, preds, y, **kwargs):
         y = copy.deepcopy(y)
-        indices = self.get_corruption_indices(preds, y)
-        y[indices] = 1
+        corruption_indices = self.get_corruption_indices(preds, y)
+        y[corruption_indices] = 1
 
-        return y
+        return y[corruption_indices], corruption_indices
 
     def get_actual_indices(self, preds, y, sample_indices, **kwargs):
         corruption_indices = self.get_corruption_indices(preds, y)

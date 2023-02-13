@@ -47,11 +47,11 @@ class Static(FeederInterface):
     def get_current_update_batch(self, update_num):
         return self._batch_fetcher.fetch(self.x_update, self.y_update, self.indices_update, update_num)
 
-    def overwrite_current_update_labels(self, new_labels, update_num):
-        self._label_updater.overwrite_update_labels(self.y_update, new_labels, update_num)
+    def overwrite_current_update_labels(self, new_labels, indices, update_num):
+        self._label_updater.overwrite_update_labels(self.y_update, new_labels, indices, update_num)
 
-    def overwrite_train_labels(self, new_labels):
-        self._label_updater.overwrite_train_labels(self.y_train, new_labels)
+    def overwrite_train_labels(self, new_labels, indices):
+        self._label_updater.overwrite_train_labels(self.y_train, indices, new_labels)
 
     def overwrite_current_update_inputs(self, new_inputs, indices, update_num):
         self._input_updater.overwrite_update_inputs(self.x_update, new_inputs, indices, update_num)

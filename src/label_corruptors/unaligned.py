@@ -13,10 +13,10 @@ class Unaligned(LabelCorruptor):
 
     def corrupt_helper(self, preds, y, **kwargs):
         y = copy.deepcopy(y)
-        indices = self.get_corruption_indices(preds, y)
-        y[indices] = generate_multiclass_noisy_labels(y[indices], self.num_classes, self.seed)
+        corruption_indices = self.get_corruption_indices(preds, y)
+        y[corruption_indices] = generate_multiclass_noisy_labels(y[corruption_indices], self.num_classes, self.seed)
 
-        return y
+        return y[corruption_indices], corruption_indices
 
     def get_actual_indices(self, preds, y, sample_indices, **kwargs):
         corruption_indices = self.get_corruption_indices(preds, y)

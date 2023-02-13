@@ -7,7 +7,7 @@ class Clean(LabelCorruptor):
         super().__init__(noise_tracker, num_classes)
 
     def corrupt_helper(self, y, **kwargs):
-        return y
+        return y, []
 
     def get_actual_indices(self, *args, **kwargs):
         return []

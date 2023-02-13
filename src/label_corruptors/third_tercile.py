@@ -20,7 +20,7 @@ class ThirdTercile(DifficultyCorruptor):
         corruption_indices = self.get_corruption_indices(preds, sample_indices)
         y[corruption_indices] = generate_multiclass_noisy_labels(y[corruption_indices], self.num_classes, self.seed)
 
-        return y
+        return y[corruption_indices], corruption_indices
 
     def get_relevant_indices(self, sample_indices, **kwargs):
         return sample_indices

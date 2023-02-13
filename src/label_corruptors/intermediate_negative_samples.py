@@ -19,7 +19,7 @@ class IntermediateNegativeSamples(DifficultyCorruptor):
         corruption_indices = self.get_corruption_indices(preds, sample_indices)
         y[corruption_indices] = 1
 
-        return y
+        return y[corruption_indices], corruption_indices
 
     def get_relevant_indices(self, preds, sample_indices):
         indices = np.where(preds == 0)[0]
