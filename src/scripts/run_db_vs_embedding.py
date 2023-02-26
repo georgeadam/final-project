@@ -125,16 +125,19 @@ def get_model(update_num, config, run, data_module):
     return model
 
 
-def get_run(batch_size, data_module, early_stopping, feeder, label_corruptor, model, num_updates, sample_limit, seed, warm_start):
+def get_run(batch_size, data_module, early_stopping, feeder, label_corruptor, model,
+            num_updates, sample_limit, seed, task, warm_start):
     api = wandb.Api(timeout=6000, api_key="604640cf55056fd18bf07355ea2757e21a0c8d17")
     runs = api.runs('georgeadam/final_project', {"$and": [
         {"config.original_callback.early_stopping.params.patience": early_stopping,
             "config.update_callback.early_stopping.params.patience": early_stopping,
-            "config.experiment_name.value": "updates_with_checkpoints", "config.experiment.seed": seed,
+            "config.experiment_name.value": "updates_with_checkpoints",
+            "config.experiment.seed": seed,
             "config.label_corruptor.name": label_corruptor,
             "config.label_corruptor.params.sample_limit": {"$in": [None, sample_limit]},
             "config.model.params.warm_start": warm_start,
             "config.data_module.name": data_module,
+            "config.data_module.params.task": task,
             "config.model.name": model,
             "config.data_module.params.batch_size": batch_size,
             "config.data_module.params.feeder_args.params.num_updates": num_updates,
@@ -158,6 +161,7 @@ def fine_tune_model(model, config, data_module, update_num):
 
     args = config
     args.update_trainer.params.enable_progress_bar = False
+    args.update_trainer.params.enable_checkpointing = False
 
     seed_everything(0)
 
