@@ -74,6 +74,14 @@ def main(args: DictConfig):
                                             data_module.num_updates)
     noisy_classification_fine_tune_metrics = compute_metrics_per_subgroup(noisy_fine_tune_model, data_module, counts)
 
+    # Re-initialize classification layer of  updated noisy model, and fine tune on clean data
+    noisy_final_model = get_model("final", noisy_config, noisy_run, data_module)
+    noisy_final_model.freeze_embedding_layers()
+    noisy_final_model.reset_classification_layer()
+    noisy_fine_tune_model = fine_tune_model(noisy_final_model, noisy_config, data_module,
+                                            data_module.num_updates)
+    noisy_classification_reset_metrics = compute_metrics_per_subgroup(noisy_fine_tune_model, data_module, counts)
+
     # Fine tune classification layer of initial clean model on clean data
     del clean_final_model
     del noisy_final_model
@@ -89,6 +97,7 @@ def main(args: DictConfig):
     noisy_sanity_check_metrics.to_csv("noisy_sanity_check_metrics.csv")
     noisy_embedding_fine_tune_metrics.to_csv("noisy_embedding_fine_tune_metrics.csv")
     noisy_classification_fine_tune_metrics.to_csv("noisy_classification_fine_tune_metrics.csv")
+    noisy_classification_reset_metrics.to_csv("noisy_classification_reset_metrics.csv")
     clean_classification_fine_tune_metrics.to_csv("clean_classification_fine_tune_metrics.csv")
 
 

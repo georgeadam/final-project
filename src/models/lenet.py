@@ -18,6 +18,8 @@ class LeNet(Model):
         else:
             num_channels = 1
 
+        self.num_classes = num_classes
+
         self.conv1 = nn.Conv2d(in_channels=num_channels, out_channels=16, kernel_size=5)
         self.conv2 = nn.Conv2d(in_channels=16, out_channels=24, kernel_size=5)
         self.maxpool1 = nn.MaxPool2d(kernel_size=2, stride=2)
@@ -71,6 +73,9 @@ class LeNet(Model):
 
         self.fc1.requires_grad_(True)
         self.fc2.requires_grad_(True)
+
+    def reset_classification_layer(self):
+        self.fc3 = nn.Linear(84, self.num_classes)
 
 
 models.register_builder("lenet", LeNet)

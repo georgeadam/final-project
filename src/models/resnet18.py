@@ -10,6 +10,8 @@ class ResNet18(Model):
         super().__init__(warm_start)
         resnet = torchvision.models.resnet18(pretrained=False, num_classes=num_classes)
 
+        self.num_classes = num_classes
+
         self.relu = resnet.relu
         self.maxpool = resnet.maxpool
         self.avgpool = resnet.avgpool
@@ -69,6 +71,11 @@ class ResNet18(Model):
         self.layer2.requires_grad_(True)
         self.layer3.requires_grad_(True)
         self.layer4.requires_grad_(True)
+
+    def reset_classification_layer(self):
+        resnet = torchvision.models.resnet18(pretrained=False, num_classes=self.num_classes)
+
+        self.fc = resnet.fc
 
 
 models.register_builder("resnet18", ResNet18)
