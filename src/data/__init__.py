@@ -3,6 +3,7 @@ from .california_housing import CaliforniaHousing
 from .cifar10_binary import CIFAR10Binary
 from .cifar10_multiclass import CIFAR10Multiclass
 from .cifar10_tabular import CIFAR10Tabular
+from .cifar100_multiclass import CIFAR100Multiclass
 from .creation import data_modules
 from .diabetes import Diabetes
 from .fashion_mnist_binary import FashionMNISTBinary
