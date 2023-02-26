@@ -10,6 +10,7 @@ params:
     num_updates: 10
     sample_limit: 1000
     seed: 0
+    task: null
     warm_start: True
 hydra:
     run:

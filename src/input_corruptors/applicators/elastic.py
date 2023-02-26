@@ -37,10 +37,16 @@ class Elastic(Applicator):
             np.float32)
         dy = (gaussian(np.random.uniform(-1, 1, size=shape[:2]), c[1], mode='reflect', truncate=3) * c[0]).astype(
             np.float32)
-        dx, dy = dx[..., np.newaxis], dy[..., np.newaxis]
 
-        x, y, z = np.meshgrid(np.arange(shape[1]), np.arange(shape[0]), np.arange(shape[2]))
-        indices = np.reshape(y + dy, (-1, 1)), np.reshape(x + dx, (-1, 1)), np.reshape(z, (-1, 1))
+        if len(shape) == 3:
+            dx, dy = dx[..., np.newaxis], dy[..., np.newaxis]
+
+            x, y, z = np.meshgrid(np.arange(shape[1]), np.arange(shape[0]), np.arange(shape[2]))
+            indices = np.reshape(y + dy, (-1, 1)), np.reshape(x + dx, (-1, 1)), np.reshape(z, (-1, 1))
+        else:
+            x, y = np.meshgrid(np.arange(shape[1]), np.arange(shape[0]))
+            indices = np.reshape(y + dy, (-1, 1)), np.reshape(x + dx, (-1, 1))
+
         return np.clip(map_coordinates(image, indices, order=1, mode='reflect').reshape(shape), 0, 1) * 255
 
 
