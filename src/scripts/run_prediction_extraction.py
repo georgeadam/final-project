@@ -45,7 +45,7 @@ def main(args: DictConfig):
     initial_fit(args, data_module, inferer, metric_tracker,
                 prediction_tracker, wandb_logger)
 
-    wandb_logger.log_table("predictions", dataframe=prediction_tracker.get_table())
+    prediction_tracker.get_table().to_csv("predictions.csv")
     wandb_logger.log_table("metrics", dataframe=metric_tracker.get_table())
 
 
