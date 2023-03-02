@@ -6,6 +6,7 @@ from .cifar10_tabular import CIFAR10Tabular
 from .cifar100_multiclass import CIFAR100Multiclass
 from .creation import data_modules
 from .diabetes import Diabetes
+from .fairface import FairFace
 from .fashion_mnist_binary import FashionMNISTBinary
 from .fashion_mnist_multiclass import FashionMNISTMulticlass
 from .higgs import Higgs
