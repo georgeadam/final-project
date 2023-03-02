@@ -20,7 +20,7 @@ class FairFace(DataModule):
         self.setup(None)
 
     def update_train_transform(self, x):
-        dataset_mean = [0.482, 0.358, 305]
+        dataset_mean = [0.482, 0.358, 0.305]
         dataset_std = [0.255, 0.222, 0.217]
 
         normalize = transforms.Normalize(mean=dataset_mean, std=dataset_std)
@@ -30,7 +30,7 @@ class FairFace(DataModule):
         self.train_target_transform = None
 
     def update_inference_transform(self, x):
-        dataset_mean = [0.482, 0.358, 305]
+        dataset_mean = [0.482, 0.358, 0.305]
         dataset_std = [0.255, 0.222, 0.217]
 
         normalize = transforms.Normalize(mean=dataset_mean, std=dataset_std)
