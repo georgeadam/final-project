@@ -51,7 +51,7 @@ class Static(FeederInterface):
         self._label_updater.overwrite_update_labels(self.y_update, new_labels, indices, update_num)
 
     def overwrite_train_labels(self, new_labels, indices):
-        self._label_updater.overwrite_train_labels(self.y_train, indices, new_labels)
+        self._label_updater.overwrite_train_labels(self.y_train, new_labels, indices)
 
     def overwrite_current_update_inputs(self, new_inputs, indices, update_num):
         self._input_updater.overwrite_update_inputs(self.x_update, new_inputs, indices, update_num)

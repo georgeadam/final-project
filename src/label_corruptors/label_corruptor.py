@@ -24,11 +24,11 @@ class LabelCorruptor:
         train_dataloader = data_module.train_initial_dataloader()
         probs, preds, y, sample_indices = inferer.make_predictions(model, dataloaders=train_dataloader)
 
-        new_y = self.corrupt_helper(probs=probs, preds=preds, y=y, sample_indices=sample_indices)
+        new_y, relative_indices = self.corrupt_helper(probs=probs, preds=preds, y=y, sample_indices=sample_indices)
         actual_indices = self.get_actual_indices(probs=probs, preds=preds, y=y, sample_indices=sample_indices)
         potential_indices = self.get_potential_indices(probs=probs, preds=preds, y=y, sample_indices=sample_indices)
         self.noise_tracker.track(0, actual_indices, potential_indices)
-        data_module.overwrite_train_labels(new_y)
+        data_module.overwrite_train_labels(new_y, relative_indices)
 
     @abc.abstractmethod
     def corrupt_helper(self, *args, **kwargs):
