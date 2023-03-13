@@ -25,6 +25,8 @@ class DataModule(LightningDataModule):
         self.train_target_transform = None
         self.inference_transform = None
         self.inference_target_transform = None
+        self.corruption_transform = None
+        self.corruption_target_transform = None
 
         self._subgroup_features = None
         self._num_updates = feeder_args.params.num_updates
@@ -113,10 +115,15 @@ class DataModule(LightningDataModule):
     def update_inference_transform(self, x):
         raise NotImplementedError
 
+    @abc.abstractmethod
+    def update_corruption_transform(self, x):
+        raise NotImplementedError
+
     def update_transforms(self, update_num):
         x, _, _ = self.data_feeder.get_train_data(update_num)
         self.update_train_transform(x)
         self.update_inference_transform(x)
+        self.update_corruption_transform(x)
 
     @property
     def num_updates(self):

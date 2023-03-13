@@ -38,6 +38,10 @@ class FairFace(DataModule):
         self.inference_transform = transforms.Compose([PILImage(None), transforms.ToTensor(), normalize])
         self.inference_target_transform = None
 
+    def update_corruption_transform(self, x):
+        self.corruption_transform = transforms.Compose([transforms.ToTensor()])
+        self.corruption_target_transform = None
+
     def set_stats(self, x, y):
         self._data_dimension = x.shape[1:]
         self._num_classes = np.max(y) + 1

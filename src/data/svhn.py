@@ -20,8 +20,7 @@ class SVHN(DataModule):
 
         normalize = transforms.Normalize(mean=dataset_mean, std=dataset_std)
 
-        self.train_transform = transforms.Compose([Transpose(),
-                                                   PILImage(None),
+        self.train_transform = transforms.Compose([PILImage(None),
                                                    transforms.RandomCrop(32, padding=4),
                                                    transforms.RandomHorizontalFlip(),
                                                    transforms.ToTensor(),
@@ -34,11 +33,14 @@ class SVHN(DataModule):
 
         normalize = transforms.Normalize(mean=dataset_mean, std=dataset_std)
 
-        self.inference_transform = transforms.Compose([Transpose(),
-                                                       PILImage(None),
+        self.inference_transform = transforms.Compose([PILImage(None),
                                                        transforms.ToTensor(),
                                                        normalize])
         self.inference_target_transform = None
+
+    def update_corruption_transform(self, x):
+        self.corruption_transform = transforms.Compose([transforms.ToTensor()])
+        self.corruption_target_transform = None
 
     def set_stats(self, x, y):
         self._data_dimension = x.shape[1:]
@@ -49,6 +51,7 @@ class SVHN(DataModule):
         test_data = TorchvisionSVHN(self.data_dir, split="test", download=True)
 
         x = np.concatenate([train_data.data, test_data.data])
+        x = np.transpose(x, (0, 2, 3, 1))
         y = np.concatenate([np.array(train_data.labels), np.array(test_data.labels)]).astype(int)
 
         return x, y

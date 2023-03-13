@@ -39,6 +39,10 @@ class Waterbirds(DataModule):
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
         ])
 
+    def update_corruption_transform(self, x):
+        self.corruption_transform = transforms.Compose([transforms.ToTensor()])
+        self.corruption_target_transform = None
+
     def load_data(self):
         metadata = pd.read_csv(os.path.join(self.data_dir, 'metadata.csv'))
         x = [os.path.join(self.data_dir, metadata["img_filename"].values[i]) for i in range(len(metadata))]

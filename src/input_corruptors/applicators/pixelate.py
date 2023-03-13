@@ -9,7 +9,12 @@ from .creation import applicators
 class Pixelate(Applicator):
     def corrupt_single_sample(self, x):
         x = torch.tensor(x)
-        shape = x.shape[1:]
+
+        if len(x.shape) > 2:
+            shape = x.shape[1:]
+        else:
+            shape = x.shape
+
         x = self.transform(x)
         c = [0.95, 0.9, 0.85, 0.75, 0.65][self.severity - 1]
 

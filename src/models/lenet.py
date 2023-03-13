@@ -14,7 +14,7 @@ class LeNet(Model):
             in_features = 600
 
         if len(data_dimension) == 3:
-            num_channels = data_dimension[0]
+            num_channels = data_dimension[2]
         else:
             num_channels = 1
 

@@ -18,7 +18,7 @@ class InputCorruptor:
 
     def corrupt(self, data_module, inferer, update_num):
         update_batch_dataloader = data_module.current_update_batch_dataloader(update_num)
-        update_batch_dataloader.dataset.transform = self.transform
+        update_batch_dataloader.dataset.transform = data_module.corruption_transform
         x, sample_indices = inferer.make_predictions(dataloaders=update_batch_dataloader)
 
         new_x, relative_indices = self.corrupt_helper(x, sample_indices=sample_indices)
@@ -29,7 +29,7 @@ class InputCorruptor:
 
     def corrupt_train(self, data_module, inferer):
         train_dataloader = data_module.train_initial_dataloader()
-        train_dataloader.dataset.transform = self.transform
+        train_dataloader.dataset.transform = data_module.corruption_transform
         x, sample_indices = inferer.make_predictions(dataloaders=train_dataloader)
 
         new_x, relative_indices = self.corrupt_helper(x, sample_indices=sample_indices)

@@ -12,7 +12,6 @@ class Elastic(Applicator):
     def corrupt_single_sample(self, x):
         x = torch.tensor(x)
         x = self.transform(x)
-
         image = np.array(x, dtype=np.float32) / 255.
         shape = image.shape
         shape_size = shape[:2]
