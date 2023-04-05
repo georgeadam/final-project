@@ -78,6 +78,8 @@ def initial_fit(args, data_module, prediction_inferer, metric_tracker, predictio
     trainer.fit(module, train_dataloaders=data_module.train_dataloader(0),
                 val_dataloaders=data_module.val_dataloader(0))
 
+    prediction_tracker.track(model, data_module, prediction_inferer, "train_inference", 0)
+    prediction_tracker.track(model, data_module, prediction_inferer, "train_cumulative_inference", 0)
     prediction_tracker.track(model, data_module, prediction_inferer, "eval", 0)
     metric_tracker.track(model, data_module, prediction_inferer, "eval", 0)
     wandb_logger.log_metrics({"eval_original/loss": metric_tracker.get_most_recent("loss"),

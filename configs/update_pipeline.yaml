@@ -7,7 +7,7 @@ defaults:
     - inferer@input_inferer: input
     - inferer@prediction_inferer: prediction
     - input_corruptor: clean
-    - label_corruptor: uniform_noise
+    - label_corruptor: clean
     - model: mlp
     - module@original_module: standard
     - module@update_module: standard

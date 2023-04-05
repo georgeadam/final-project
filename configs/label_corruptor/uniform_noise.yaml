@@ -1,5 +1,5 @@
 name: uniform_noise
 params:
-    noise_level: 0.0
+    noise_level: 1.0
     sample_limit: null
     seed: 0
