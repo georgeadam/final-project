@@ -1,0 +1,21 @@
+experiment_name: embedding_similarity
+counts_path: "results/counts/3313264678_fashion_mnist_multiclass.csv"
+params:
+    batch_size: 32
+    clean_seed: 0
+    data_module: "fashion_mnist_multiclass"
+    early_stopping: 3
+    feeder: "current_static"
+    label_corruptor: "first_tercile"
+    max_steps: -1
+    max_epochs: -1
+    model: lenet
+    noisy_seed: 0
+    num_updates: 10
+    sample_limit: 1000
+    task: null
+    warm_start: True
+hydra:
+    run:
+        dir: results/${params.data_module}/${experiment_name}/${wandb_run:}
+    output_subdir: .

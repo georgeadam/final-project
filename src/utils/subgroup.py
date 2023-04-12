@@ -42,6 +42,20 @@ def generate_subgroup_conditions(predictions):
     return subgroup_conditions
 
 
+def generate_subgroup_indices(counts):
+    first = np.percentile(counts["correct"], 33)
+    second = np.percentile(counts["correct"], 66)
+    third = np.percentile(counts["correct"], 100)
+
+    subgroup_indices = [("first_tercile", counts.loc[counts["correct"] < first]["sample_idx"]),
+                        ("second_tercile", counts.loc[(counts["correct"] >= first) & (counts["correct"] < second)]["sample_idx"]),
+                           ("third_tercile", counts.loc[(counts["correct"] >= second) & (counts["correct"] <= third)]["sample_idx"]),
+                           ("all", counts.loc[counts["correct"] > -1]["sample_idx"])]
+
+    return subgroup_indices
+
+
+
 def compute_metrics_helper(predictions, subgroup_conditions):
     metrics = []
 

@@ -19,7 +19,7 @@ def remove_prefix(state_dict):
 
 
 def load_model(base_dir, checkpoint, args, data_module):
-    checkpoint = torch.load(os.path.join(base_dir, checkpoint))
+    checkpoint = torch.load(os.path.join(base_dir, checkpoint), map_location="cpu")
     state_dict = remove_prefix(checkpoint["state_dict"])
 
     model = models.create(args.model.name, data_dimension=data_module.data_dimension,
