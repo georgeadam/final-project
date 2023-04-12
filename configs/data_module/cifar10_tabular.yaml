@@ -4,4 +4,4 @@ defaults:
     - splitter@params.splitter_args: random
 params:
     batch_size: 32
-    data_dir: data/cifar10/cifar10.arff
+    data_dir: data/cifar10_tabular/cifar10_tabular.arff
