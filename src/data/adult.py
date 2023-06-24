@@ -37,6 +37,9 @@ class Adult(DataModule):
         self.inference_transform = Compose([scaler, tensor])
         self.inference_target_transform = None
 
+    def update_corruption_transform(self, x):
+        pass
+
     def load_data(self):
         data = fetch_openml("adult", version=2, as_frame=True, return_X_y=True)
         x, y = data

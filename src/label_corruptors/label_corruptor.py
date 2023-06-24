@@ -3,7 +3,7 @@ import abc
 import numpy as np
 
 
-class LabelCorruptor:
+class LabelCorruptor(metaclass=abc.ABCMeta):
     def __init__(self, noise_tracker, num_classes, sample_limit=float("inf"), seed=0):
         self.noise_tracker = noise_tracker
         self.num_classes = num_classes

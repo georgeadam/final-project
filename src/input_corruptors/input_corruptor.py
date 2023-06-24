@@ -7,7 +7,7 @@ import torchvision.transforms as transforms
 from .applicators import applicators
 
 
-class InputCorruptor:
+class InputCorruptor(metaclass=abc.ABCMeta):
     def __init__(self, noise_tracker, applicator_args, sample_limit=float("inf"), seed=0):
         self.noise_tracker = noise_tracker
         self.sample_limit = sample_limit

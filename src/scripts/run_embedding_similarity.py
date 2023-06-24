@@ -17,6 +17,7 @@ from src.utils.embedding import feature_space_linear_cka, frobenius_similarity, 
 from src.utils.hydra import get_wandb_run
 from src.utils.load import find_last_checkpoint_for_update, get_checkpoints, load_model
 from src.utils.subgroup import generate_subgroup_indices
+from src.utils.wandb import WANDB_API_KEY
 
 os.chdir(ROOT_DIR)
 config_path = os.path.join(ROOT_DIR, "configs")
@@ -30,7 +31,7 @@ def main(args: DictConfig):
 
     cfg = OmegaConf.to_container(args, resolve=True, throw_on_missing=True)
 
-    wandb.login(key="604640cf55056fd18bf07355ea2757e21a0c8d17")
+    wandb.login(key=WANDB_API_KEY)
     wandb_logger = WandbLogger(project="final_project")
     wandb_logger.experiment.config.update(cfg)
 
@@ -167,7 +168,7 @@ def get_model(update_num, config, run, data_module):
 
 def get_run(batch_size, data_module, early_stopping, feeder, label_corruptor, max_steps, max_epochs, model,
             num_updates, sample_limit, seed, task, warm_start):
-    api = wandb.Api(timeout=6000, api_key="604640cf55056fd18bf07355ea2757e21a0c8d17")
+    api = wandb.Api(timeout=6000, api_key=WANDB_API_KEY)
     runs = api.runs('georgeadam/final_project', {"$and": [
         {
             "config.original_callback.early_stopping.params.patience": early_stopping,

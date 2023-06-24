@@ -17,6 +17,7 @@ from src.modules import modules
 from src.trackers import trackers
 from src.trainers import trainers
 from src.utils.hydra import get_wandb_run
+from src.utils.wandb import WANDB_API_KEY
 
 os.chdir(ROOT_DIR)
 config_path = os.path.join(ROOT_DIR, "configs")
@@ -31,7 +32,7 @@ def main(args: DictConfig):
     cfg = OmegaConf.to_container(args, resolve=True, throw_on_missing=True)
 
     # Initial training
-    wandb.login(key="604640cf55056fd18bf07355ea2757e21a0c8d17")
+    wandb.login(key=WANDB_API_KEY)
     wandb_logger = WandbLogger(project="final_project")
     wandb_logger.experiment.config.update(cfg)
 

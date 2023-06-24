@@ -30,12 +30,12 @@ class MLP(Model):
 
     def _create_layers(self, layers, data_dimension, num_classes):
         if layers == 0:
-            fc = torch.nn.ModuleList([torch.nn.Linear(data_dimension, 1)])
+            fc = torch.nn.ModuleList([torch.nn.Linear(data_dimension, num_classes)])
         elif layers == 1:
-            fc = torch.nn.ModuleList([torch.nn.Linear(data_dimension, 10), torch.nn.Linear(10, 1)])
+            fc = torch.nn.ModuleList([torch.nn.Linear(data_dimension, 10), torch.nn.Linear(10, num_classes)])
         elif layers == 2:
             fc = torch.nn.ModuleList(
-                [torch.nn.Linear(data_dimension, 20), torch.nn.Linear(20, 10), torch.nn.Linear(10, 1)])
+                [torch.nn.Linear(data_dimension, 20), torch.nn.Linear(20, 10), torch.nn.Linear(10, num_classes)])
         elif layers > 2:
             initial_hidden_units = 50 * (2 ** layers)
             fc = [torch.nn.Linear(data_dimension, initial_hidden_units)]
