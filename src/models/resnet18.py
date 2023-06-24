@@ -5,10 +5,64 @@ from .creation import models
 from .model import Model
 
 
+# torchvision.models.resnet.BasicBlock.relu1 = torch.nn.ReLU(inplace=True)
+# torchvision.models.resnet.BasicBlock.relu2 = torch.nn.ReLU(inplace=True)
+#
+#
+# def basic_forward(self, x):
+#     identity = x
+#
+#     out = self.conv1(x)
+#     out = self.bn1(out)
+#     out = self.relu1(out)
+#
+#     out = self.conv2(out)
+#     out = self.bn2(out)
+#
+#     if self.downsample is not None:
+#         identity = self.downsample(x)
+#
+#     out += identity
+#     out = self.relu1(out)
+#
+#     return out
+#
+# torchvision.models.resnet.BasicBlock.forward = basic_forward
+#
+# torchvision.models.resnet.Bottleneck.relu1 = torch.nn.ReLU(inplace=True)
+# torchvision.models.resnet.Bottleneck.relu2 = torch.nn.ReLU(inplace=True)
+
+
+# def bottleneck_forward(self, x):
+#     identity = x
+#
+#     out = self.conv1(x)
+#     out = self.bn1(out)
+#     out = self.relu(out)
+#
+#     out = self.conv2(out)
+#     out = self.bn2(out)
+#     out = self.relu(out)
+#
+#     out = self.conv3(out)
+#     out = self.bn3(out)
+#
+#     if self.downsample is not None:
+#         identity = self.downsample(x)
+#
+#     out += identity
+#     out = self.relu(out)
+#
+#     return out
+#
+# torchvision.models.resnet.Bottleneck.forward = bottleneck_forward
+
+
 class ResNet18(Model):
     def __init__(self, num_classes, warm_start, **kwargs):
         super().__init__(warm_start)
         resnet = torchvision.models.resnet18(pretrained=False, num_classes=num_classes)
+
 
         self.num_classes = num_classes
 
